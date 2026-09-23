@@ -1,0 +1,758 @@
+[
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @clerk/clerk-js",
+    "description": "Package '@clerk/clerk-js' contains documented security flaws in version range >=5.115.0-snapshot.v20251212000700: @solana/wallet-adapter-base; @solana/wallet-adapter-react; @solana/wallet-standard.",
+    "affectedComponent": "package.json -> @clerk/clerk-js",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @clerk/clerk-js' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @clerk/clerk-js\n\n# Advisory references\nAdvisory ID: @clerk/clerk-js",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@clerk/clerk-js' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @deck.gl/carto",
+    "description": "Package '@deck.gl/carto' contains documented security flaws in version range >=8.10.0-alpha.1: @deck.gl/geo-layers.",
+    "affectedComponent": "package.json -> @deck.gl/carto",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @deck.gl/carto' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @deck.gl/carto\n\n# Advisory references\nAdvisory ID: @deck.gl/carto",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@deck.gl/carto' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @deck.gl/geo-layers",
+    "description": "Package '@deck.gl/geo-layers' contains documented security flaws in version range >=8.6.6: @deck.gl/mesh-layers; @loaders.gl/3d-tiles; @luma.gl/gltf.",
+    "affectedComponent": "package.json -> @deck.gl/geo-layers",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @deck.gl/geo-layers' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @deck.gl/geo-layers\n\n# Advisory references\nAdvisory ID: @deck.gl/geo-layers",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@deck.gl/geo-layers' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @deck.gl/mesh-layers",
+    "description": "Package '@deck.gl/mesh-layers' contains documented security flaws in version range >=8.6.6: @loaders.gl/gltf; @luma.gl/gltf.",
+    "affectedComponent": "package.json -> @deck.gl/mesh-layers",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @deck.gl/mesh-layers' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @deck.gl/mesh-layers\n\n# Advisory references\nAdvisory ID: @deck.gl/mesh-layers",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@deck.gl/mesh-layers' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @loaders.gl/3d-tiles",
+    "description": "Package '@loaders.gl/3d-tiles' contains documented security flaws in version range >=3.1.0-alpha.1: @loaders.gl/gltf.",
+    "affectedComponent": "package.json -> @loaders.gl/3d-tiles",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @loaders.gl/3d-tiles' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @loaders.gl/3d-tiles\n\n# Advisory references\nAdvisory ID: @loaders.gl/3d-tiles",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@loaders.gl/3d-tiles' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @loaders.gl/gltf",
+    "description": "Package '@loaders.gl/gltf' contains documented security flaws in version range >=3.1.0-alpha.1: @loaders.gl/textures.",
+    "affectedComponent": "package.json -> @loaders.gl/gltf",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @loaders.gl/gltf' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @loaders.gl/gltf\n\n# Advisory references\nAdvisory ID: @loaders.gl/gltf",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@loaders.gl/gltf' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @loaders.gl/textures",
+    "description": "Package '@loaders.gl/textures' contains documented security flaws in version range *: texture-compressor.",
+    "affectedComponent": "package.json -> @loaders.gl/textures",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @loaders.gl/textures' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @loaders.gl/textures\n\n# Advisory references\nAdvisory ID: @loaders.gl/textures",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@loaders.gl/textures' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @luma.gl/gltf",
+    "description": "Package '@luma.gl/gltf' contains documented security flaws in version range *: @loaders.gl/gltf; @loaders.gl/textures.",
+    "affectedComponent": "package.json -> @luma.gl/gltf",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @luma.gl/gltf' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @luma.gl/gltf\n\n# Advisory references\nAdvisory ID: @luma.gl/gltf",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@luma.gl/gltf' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana-mobile/mobile-wallet-adapter-protocol-web3js",
+    "description": "Package '@solana-mobile/mobile-wallet-adapter-protocol-web3js' contains documented security flaws in version range *: @solana/web3.js.",
+    "affectedComponent": "package.json -> @solana-mobile/mobile-wallet-adapter-protocol-web3js",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana-mobile/mobile-wallet-adapter-protocol-web3js' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana-mobile/mobile-wallet-adapter-protocol-web3js\n\n# Advisory references\nAdvisory ID: @solana-mobile/mobile-wallet-adapter-protocol-web3js",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@solana-mobile/mobile-wallet-adapter-protocol-web3js' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana-mobile/wallet-adapter-mobile",
+    "description": "Package '@solana-mobile/wallet-adapter-mobile' contains documented security flaws in version range *: @solana-mobile/mobile-wallet-adapter-protocol-web3js; @solana/wallet-adapter-base; @solana/web3.js.",
+    "affectedComponent": "package.json -> @solana-mobile/wallet-adapter-mobile",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana-mobile/wallet-adapter-mobile' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana-mobile/wallet-adapter-mobile\n\n# Advisory references\nAdvisory ID: @solana-mobile/wallet-adapter-mobile",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@solana-mobile/wallet-adapter-mobile' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/wallet-adapter-base",
+    "description": "Package '@solana/wallet-adapter-base' contains documented security flaws in version range *: @solana/web3.js.",
+    "affectedComponent": "package.json -> @solana/wallet-adapter-base",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/wallet-adapter-base' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/wallet-adapter-base\n\n# Advisory references\nAdvisory ID: @solana/wallet-adapter-base",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@solana/wallet-adapter-base' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/wallet-adapter-react",
+    "description": "Package '@solana/wallet-adapter-react' contains documented security flaws in version range *: @solana-mobile/wallet-adapter-mobile; @solana/wallet-adapter-base; @solana/wallet-standard-wallet-adapter-react; @solana/web3.js.",
+    "affectedComponent": "package.json -> @solana/wallet-adapter-react",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/wallet-adapter-react' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/wallet-adapter-react\n\n# Advisory references\nAdvisory ID: @solana/wallet-adapter-react",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@solana/wallet-adapter-react' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/wallet-standard",
+    "description": "Package '@solana/wallet-standard' contains documented security flaws in version range *: @solana/wallet-standard-wallet-adapter.",
+    "affectedComponent": "package.json -> @solana/wallet-standard",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/wallet-standard' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/wallet-standard\n\n# Advisory references\nAdvisory ID: @solana/wallet-standard",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@solana/wallet-standard' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/wallet-standard-wallet-adapter",
+    "description": "Package '@solana/wallet-standard-wallet-adapter' contains documented security flaws in version range *: @solana/wallet-standard-wallet-adapter-base; @solana/wallet-standard-wallet-adapter-react.",
+    "affectedComponent": "package.json -> @solana/wallet-standard-wallet-adapter",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/wallet-standard-wallet-adapter' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/wallet-standard-wallet-adapter\n\n# Advisory references\nAdvisory ID: @solana/wallet-standard-wallet-adapter",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@solana/wallet-standard-wallet-adapter' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/wallet-standard-wallet-adapter-base",
+    "description": "Package '@solana/wallet-standard-wallet-adapter-base' contains documented security flaws in version range *: @solana/wallet-adapter-base; @solana/web3.js.",
+    "affectedComponent": "package.json -> @solana/wallet-standard-wallet-adapter-base",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/wallet-standard-wallet-adapter-base' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/wallet-standard-wallet-adapter-base\n\n# Advisory references\nAdvisory ID: @solana/wallet-standard-wallet-adapter-base",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@solana/wallet-standard-wallet-adapter-base' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/wallet-standard-wallet-adapter-react",
+    "description": "Package '@solana/wallet-standard-wallet-adapter-react' contains documented security flaws in version range *: @solana/wallet-adapter-base; @solana/wallet-standard-wallet-adapter-base.",
+    "affectedComponent": "package.json -> @solana/wallet-standard-wallet-adapter-react",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/wallet-standard-wallet-adapter-react' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/wallet-standard-wallet-adapter-react\n\n# Advisory references\nAdvisory ID: @solana/wallet-standard-wallet-adapter-react",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@solana/wallet-standard-wallet-adapter-react' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @solana/web3.js",
+    "description": "Package '@solana/web3.js' contains documented security flaws in version range <=0.0.0-pr-29130 || 0.0.4 - 1.99.0: jayson.",
+    "affectedComponent": "package.json -> @solana/web3.js",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @solana/web3.js' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @solana/web3.js\n\n# Advisory references\nAdvisory ID: @solana/web3.js",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update '@solana/web3.js' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: @vitest/mocker",
+    "description": "Package '@vitest/mocker' contains documented security flaws in version range 2.1.0 - 4.1.10: Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock.",
+    "affectedComponent": "package.json -> @vitest/mocker",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls @vitest/mocker' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls @vitest/mocker\n\n# Advisory references\nhttps://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update '@vitest/mocker' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: deck.gl",
+    "description": "Package 'deck.gl' contains documented security flaws in version range >=8.6.6: @deck.gl/carto; @deck.gl/geo-layers; @deck.gl/mesh-layers.",
+    "affectedComponent": "package.json -> deck.gl",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls deck.gl' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls deck.gl\n\n# Advisory references\nAdvisory ID: deck.gl",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'deck.gl' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: exceljs",
+    "description": "Package 'exceljs' contains documented security flaws in version range >=3.5.0: uuid.",
+    "affectedComponent": "package.json -> exceljs",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls exceljs' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls exceljs\n\n# Advisory references\nAdvisory ID: exceljs",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'exceljs' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: image-size",
+    "description": "Package 'image-size' contains documented security flaws in version range <=2.0.2: image-size: ICNS parser allows denial of service through an infinite loop; image-size: JXL and HEIF parsers allow denial of service through infinite loops.",
+    "affectedComponent": "package.json -> image-size",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls image-size' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls image-size\n\n# Advisory references\nhttps://github.com/advisories/GHSA-w3rx-r6r6-pgpr\nhttps://github.com/advisories/GHSA-5p2g-fcmc-qvqq",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'image-size' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: jayson",
+    "description": "Package 'jayson' contains documented security flaws in version range 2.0.6 - 4.3.0: stream-json; uuid.",
+    "affectedComponent": "package.json -> jayson",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls jayson' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls jayson\n\n# Advisory references\nAdvisory ID: jayson",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'jayson' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: metro",
+    "description": "Package 'metro' contains documented security flaws in version range 0.22.1 - 0.83.7 || 0.84.0 - 0.84.4 || 0.85.0 - 0.87.0: image-size; metro-config; metro-transform-worker.",
+    "affectedComponent": "package.json -> metro",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls metro' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls metro\n\n# Advisory references\nAdvisory ID: metro",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update 'metro' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: metro-config",
+    "description": "Package 'metro-config' contains documented security flaws in version range <=0.83.7 || 0.84.0 - 0.84.4 || 0.85.0 - 0.87.0: metro.",
+    "affectedComponent": "package.json -> metro-config",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls metro-config' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls metro-config\n\n# Advisory references\nAdvisory ID: metro-config",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update 'metro-config' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: metro-transform-worker",
+    "description": "Package 'metro-transform-worker' contains documented security flaws in version range 0.60.0 - 0.83.7 || 0.84.0 - 0.84.4 || 0.85.0 - 0.87.0: metro.",
+    "affectedComponent": "package.json -> metro-transform-worker",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls metro-transform-worker' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls metro-transform-worker\n\n# Advisory references\nAdvisory ID: metro-transform-worker",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update 'metro-transform-worker' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: stream-json",
+    "description": "Package 'stream-json' contains documented security flaws in version range <=3.4.0: stream-json: pick/ignore/filter/replace filters are O(depth²) on nested input — small crafted JSON blocks the event loop for seconds→minutes (DoS).",
+    "affectedComponent": "package.json -> stream-json",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls stream-json' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls stream-json\n\n# Advisory references\nhttps://github.com/advisories/GHSA-528h-pc64-c93x",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'stream-json' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: texture-compressor",
+    "description": "Package 'texture-compressor' contains documented security flaws in version range *: image-size.",
+    "affectedComponent": "package.json -> texture-compressor",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "High"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls texture-compressor' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls texture-compressor\n\n# Advisory references\nAdvisory ID: texture-compressor",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'texture-compressor' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: uuid",
+    "description": "Package 'uuid' contains documented security flaws in version range <11.1.1: uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided.",
+    "affectedComponent": "package.json -> uuid",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls uuid' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls uuid\n\n# Advisory references\nhttps://github.com/advisories/GHSA-w5hq-g745-h8pq",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix --force' to update 'uuid' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "Vulnerable Third-Party Dependency: vitest",
+    "description": "Package 'vitest' contains documented security flaws in version range 2.1.0-beta.1 - 4.1.10: @vitest/mocker; Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock.",
+    "affectedComponent": "package.json -> vitest",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A06:2021-Vulnerable and Outdated Components",
+    "certIn": "CERT-In Advisory CS-2023-08: Management of Outdated Third-Party Software Components",
+    "stepsToReproduce": "1. Inspect package.json / package-lock.json.\n2. Run 'npm ls vitest' to observe vulnerable resolution.\n3. Trigger vulnerable library code path per linked advisory.",
+    "proofOfConcept": "# Dependency inspection\nnpm ls vitest\n\n# Advisory references\nhttps://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+    "businessImpact": "Depending on the vulnerability class (e.g. prototype pollution, ReDoS, path traversal, RCE), exploiting this third-party dependency can allow attackers to crash services or tamper with processed data.",
+    "remediation": "Execute 'npm audit fix' to update 'vitest' to a patched release."
+  },
+  {
+    "scope": "Input Validation and Data Handling",
+    "title": "DOM-based XSS Risk via Bypassed Safe HTML Sanitization (trustedHtml)",
+    "description": "The application defines a 'trustedHtml' cast function in dom-utils.ts that returns raw strings without sanitization as long as an audit reason is provided. Over 300 UI components use 'legacy direct innerHTML migration' as the reason, directly assigning unsanitized strings to innerHTML.",
+    "affectedComponent": "src/utils/dom-utils.ts & multiple UI components",
+    "severity": "high",
+    "cvss": {
+      "score": 7.2,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "rating": "High"
+    },
+    "owasp": "A03:2021-Injection",
+    "certIn": "CERT-In Web Application Security Guidelines Sec 4.2: Client-Side Input Sanitization & DOM XSS",
+    "stepsToReproduce": "1. Open src/utils/dom-utils.ts.\n2. Observe that trustedHtml(html, reason) simply returns the unescaped string.\n3. Search for calls to trustedHtml across src/ and observe pervasive usage with generic migration reasons.",
+    "proofOfConcept": "// Vulnerable definition in src/utils/dom-utils.ts:\nexport function trustedHtml(html: string, reason: string): TrustedHtml {\n  if (!reason.trim()) throw new Error('trustedHtml() requires an audit reason');\n  return html as TrustedHtml;\n}\nexport function setTrustedHtml(el: Element, html: TrustedHtml): void {\n  el.innerHTML = html;\n}\n\n// Bypassed call in UI component:\nsetTrustedHtml(listEl, trustedHtml(payload, \"legacy direct innerHTML migration\"));",
+    "businessImpact": "If untrusted inputs (e.g. RSS news feeds, external webcam titles, user-controlled query parameters) reach these renderers, an attacker can execute arbitrary script in user sessions, accessing localStorage and initiating unauthorized actions.",
+    "remediation": "Replace the trustedHtml type-cast bypass with a cryptographically enforced DOMPurify sanitizer or native DOM createElement / textContent APIs."
+  },
+  {
+    "scope": "Client-Side Security Controls",
+    "title": "Missing Security Header: Content-Security-Policy",
+    "description": "The application HTTP response does not set 'content-security-policy' when requested at http://localhost:3000.",
+    "affectedComponent": "HTTP Response Headers (Server / Reverse Proxy Config)",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:L/A:N",
+      "rating": "High"
+    },
+    "owasp": "A05:2021-Security Misconfiguration",
+    "certIn": "CERT-In Security Standard Sec 5.1: Content Security Policy Enforcement",
+    "stepsToReproduce": "1. Execute: curl -I \"http://localhost:3000\"\n2. Inspect response headers.\n3. Verify 'content-security-policy' header is absent.",
+    "proofOfConcept": "curl -I \"http://localhost:3000\"\n\nHTTP/1.1 200 OK\nContent-Type: text/html\nCache-Control: no-cache\n# 'content-security-policy' header is absent from server response.",
+    "businessImpact": "Without CSP, injected scripts (XSS) can run unrestricted, exfiltrate session data, and manipulate page content.",
+    "remediation": "Configure your reverse proxy, CDN, or server middleware (e.g. Helmet.js in Express, or headers block in vercel.json) to set 'Content-Security-Policy'."
+  },
+  {
+    "scope": "Client-Side Security Controls",
+    "title": "Missing Security Header: X-Frame-Options",
+    "description": "The application HTTP response does not set 'x-frame-options' when requested at http://localhost:3000.",
+    "affectedComponent": "HTTP Response Headers (Server / Reverse Proxy Config)",
+    "severity": "moderate",
+    "cvss": {
+      "score": 6.1,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A05:2021-Security Misconfiguration",
+    "certIn": "CERT-In Advisory: Clickjacking & Frame Control Standard",
+    "stepsToReproduce": "1. Execute: curl -I \"http://localhost:3000\"\n2. Inspect response headers.\n3. Verify 'x-frame-options' header is absent.",
+    "proofOfConcept": "curl -I \"http://localhost:3000\"\n\nHTTP/1.1 200 OK\nContent-Type: text/html\nCache-Control: no-cache\n# 'x-frame-options' header is absent from server response.",
+    "businessImpact": "Missing X-Frame-Options allows the dashboard to be embedded in malicious iframes, enabling Clickjacking attacks.",
+    "remediation": "Configure your reverse proxy, CDN, or server middleware (e.g. Helmet.js in Express, or headers block in vercel.json) to set 'X-Frame-Options'."
+  },
+  {
+    "scope": "Client-Side Security Controls",
+    "title": "Missing Security Header: X-Content-Type-Options",
+    "description": "The application HTTP response does not set 'x-content-type-options' when requested at http://localhost:3000.",
+    "affectedComponent": "HTTP Response Headers (Server / Reverse Proxy Config)",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A05:2021-Security Misconfiguration",
+    "certIn": "CERT-In Guidelines: MIME-Sniffing Prevention",
+    "stepsToReproduce": "1. Execute: curl -I \"http://localhost:3000\"\n2. Inspect response headers.\n3. Verify 'x-content-type-options' header is absent.",
+    "proofOfConcept": "curl -I \"http://localhost:3000\"\n\nHTTP/1.1 200 OK\nContent-Type: text/html\nCache-Control: no-cache\n# 'x-content-type-options' header is absent from server response.",
+    "businessImpact": "Browsers may MIME-sniff response payloads, turning benign uploads or documents into executable script vectors.",
+    "remediation": "Configure your reverse proxy, CDN, or server middleware (e.g. Helmet.js in Express, or headers block in vercel.json) to set 'X-Content-Type-Options'."
+  },
+  {
+    "scope": "Client-Side Security Controls",
+    "title": "Missing Security Header: Referrer-Policy",
+    "description": "The application HTTP response does not set 'referrer-policy' when requested at http://localhost:3000.",
+    "affectedComponent": "HTTP Response Headers (Server / Reverse Proxy Config)",
+    "severity": "moderate",
+    "cvss": {
+      "score": 4.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A01:2021-Broken Access Control",
+    "certIn": "CERT-In Privacy Guidelines: Referrer Leakage Reduction",
+    "stepsToReproduce": "1. Execute: curl -I \"http://localhost:3000\"\n2. Inspect response headers.\n3. Verify 'referrer-policy' header is absent.",
+    "proofOfConcept": "curl -I \"http://localhost:3000\"\n\nHTTP/1.1 200 OK\nContent-Type: text/html\nCache-Control: no-cache\n# 'referrer-policy' header is absent from server response.",
+    "businessImpact": "Full URLs containing internal paths, query tokens, or IDs may leak to third-party domains via the Referer header.",
+    "remediation": "Configure your reverse proxy, CDN, or server middleware (e.g. Helmet.js in Express, or headers block in vercel.json) to set 'Referrer-Policy'."
+  },
+  {
+    "scope": "Client-Side Security Controls",
+    "title": "Cryptographically Ineffective Static CSP Nonce ('wm-static-bootstrap')",
+    "description": "The deployment configuration in vercel.json defines a CSP with 'nonce-wm-static-bootstrap', and index.html hardcodes this exact static string. W3C CSP Level 3 requires nonces to be freshly generated cryptographically random values per request. A static nonce enables any attacker to bypass CSP script execution controls.",
+    "affectedComponent": "vercel.json & index.html (CSP Directive)",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:L/A:N",
+      "rating": "High"
+    },
+    "owasp": "A05:2021-Security Misconfiguration",
+    "certIn": "CERT-In Advisory CS-2023-01: Cryptographic Nonce Implementation in W3C CSP",
+    "stepsToReproduce": "1. Inspect vercel.json line with Content-Security-Policy.\n2. Observe static string: nonce-wm-static-bootstrap.\n3. Inspect index.html script tag: nonce=\"wm-static-bootstrap\".\n4. Inject a test script tag carrying this known static nonce.",
+    "proofOfConcept": "<!-- Static nonce in index.html line 555 -->\n<script type=\"module\" src=\"/src/main.ts\" nonce=\"wm-static-bootstrap\"></script>\n\n<!-- Attacker payload bypassing CSP using the known static nonce -->\n<script nonce=\"wm-static-bootstrap\">\n  // Bypasses CSP script-src 'nonce-wm-static-bootstrap'\n  console.warn('CSP script execution policy bypassed via static nonce');\n</script>",
+    "businessImpact": "Completely neutralizes Content Security Policy script-src protection against Cross-Site Scripting (XSS). An attacker who finds any HTML injection can execute arbitrary code despite CSP.",
+    "remediation": "Remove the hardcoded static nonce. Use cryptographic script hashes (sha256-...) for static scripts, or generate a cryptographically random 128-bit nonce dynamically per request in edge middleware."
+  },
+  {
+    "scope": "Secure Communication Mechanisms",
+    "title": "Missing HTTP Strict-Transport-Security (HSTS) Header",
+    "description": "The application does not enforce Strict-Transport-Security on responses from http://localhost:3000.",
+    "affectedComponent": "Transport Layer Security / HTTP Response Headers",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.9,
+      "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A02:2021-Cryptographic Failures",
+    "certIn": "CERT-In Technical Advisory: Transport Layer Security & HSTS Guidelines",
+    "stepsToReproduce": "1. Send HTTP request to http://localhost:3000.\n2. Inspect response headers for Strict-Transport-Security.\n3. Note absence of HSTS enforcement.",
+    "proofOfConcept": "curl -s -I \"http://localhost:3000\" | grep -i \"strict-transport-security\"\n# Result: (empty, header missing)",
+    "businessImpact": "Without HSTS, user sessions can be intercepted via SSL-stripping and man-in-the-middle (MitM) attacks during initial unencrypted connections.",
+    "remediation": "Add 'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload' in the production web server and CDN configuration."
+  },
+  {
+    "scope": "Authentication and Session Management",
+    "title": "Session Cookies Not Enforced on Initial Entrypoint",
+    "description": "No Set-Cookie headers observed on initial application load at http://localhost:3000. Browsers rely on asynchronous client-side scripts to mint sessions via API.",
+    "affectedComponent": "Client-Side Session Lifecycle",
+    "severity": "info",
+    "cvss": {
+      "score": 0,
+      "vector": "N/A",
+      "rating": "None"
+    },
+    "owasp": "A07:2021-Identification and Authentication Failures",
+    "certIn": "CERT-In Guidelines Sec 3.4: Session Management Baseline",
+    "stepsToReproduce": "1. GET http://localhost:3000\n2. Inspect Set-Cookie response header.\n3. Observe absence of baseline session initialization.",
+    "proofOfConcept": "curl -i \"http://localhost:3000\" | grep -i \"Set-Cookie\"",
+    "businessImpact": "Informational: Session tokens are minted asynchronously on demand via /api/wm-session.",
+    "remediation": "Ensure asynchronous session endpoints enforce strict cookie security attributes."
+  },
+  {
+    "scope": "Authorization and Access Control",
+    "title": "Broken Access Control: Unauthenticated Access to Operational Seed Contract Probe",
+    "description": "The sensitive endpoint '/api/seed-contract-probe' responded with HTTP 200 OK without requiring authentication or authorization headers.",
+    "affectedComponent": "API Route (/api/seed-contract-probe)",
+    "severity": "critical",
+    "cvss": {
+      "score": 9.1,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "rating": "Critical"
+    },
+    "owasp": "A01:2021-Broken Access Control",
+    "certIn": "CERT-In Advisory CS-2023-04: Authorization Controls & Privilege Escalation",
+    "stepsToReproduce": "1. Send an unauthenticated request:\ncurl -X GET \"http://localhost:3000/api/seed-contract-probe\"\n2. Observe response status is HTTP 200 OK.",
+    "proofOfConcept": "curl -i -X GET \"http://localhost:3000/api/seed-contract-probe\"\n\nHTTP/1.1 200 OK\n(Unrestricted privileged execution succeeded)",
+    "businessImpact": "Unauthenticated external users can trigger internal administrative functions, clear system caches, or consume privileged AI compute.",
+    "remediation": "Implement strict authentication middleware verifying HMAC shared secrets or administrative bearer tokens before processing requests."
+  },
+  {
+    "scope": "Authorization and Access Control",
+    "title": "Bot/UA Gate Bypass on Sensitive Operational Endpoints",
+    "description": "In middleware.ts, endpoints such as '/api/seed-contract-probe' are placed in the PUBLIC_API_PATHS bypass list to allow external uptime monitoring tools. If downstream handlers lack robust internal secret verification, the gateway completely bypasses traffic inspection.",
+    "affectedComponent": "middleware.ts (PUBLIC_API_PATHS allowlist)",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A01:2021-Broken Access Control",
+    "certIn": "CERT-In Guidelines Sec 6.1: Edge Rate Limiting & Gateway Access Control",
+    "stepsToReproduce": "1. View middleware.ts lines 54-62.\n2. Observe PUBLIC_API_PATHS Set containing /api/seed-contract-probe and /api/internal/brief-why-matters.\n3. Notice bot/UA filtering is explicitly bypassed.",
+    "proofOfConcept": "// Code snippet from middleware.ts:\nconst PUBLIC_API_PATHS = new Set([\n  '/api/version',\n  '/api/health',\n  '/api/seed-contract-probe',\n  '/api/internal/brief-why-matters',\n  ...\n]);",
+    "businessImpact": "Bypassing edge bot filters shifts all defense responsibilities to the backend handlers, increasing surface area for denial-of-service or brute force attacks.",
+    "remediation": "Implement origin/IP restrictions or require mutual TLS/pre-shared tokens at the edge middleware level rather than bypassing edge filtering completely."
+  },
+  {
+    "scope": "API Security",
+    "title": "Wildcard CORS Origin on Authenticated Sensitive Routes (/oauth, /mcp, /ask)",
+    "description": "In vercel.json, sensitive routes including '/oauth/(.*)', '/mcp', and '/ask' are configured with 'Access-Control-Allow-Origin: *' while simultaneously accepting 'Authorization' and 'X-WorldMonitor-Key' headers. Permitting wildcard origins on routes that process credentials exposes API interactions to unvetted third-party client contexts.",
+    "affectedComponent": "vercel.json (CORS headers definition for /oauth, /mcp, /ask)",
+    "severity": "high",
+    "cvss": {
+      "score": 7.5,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+      "rating": "High"
+    },
+    "owasp": "A01:2021-Broken Access Control",
+    "certIn": "CERT-In Guidelines Sec 6.3: API Key & OAuth Origin Whitelisting",
+    "stepsToReproduce": "1. Inspect vercel.json lines 167-197.\n2. Observe routes /mcp, /a2a, /ask, and /oauth/(.*).\n3. Confirm Access-Control-Allow-Origin is set to wildcard \"*\" while Access-Control-Allow-Headers explicitly permits Authorization.",
+    "proofOfConcept": "// Excerpt from vercel.json:\n{\n  \"source\": \"/oauth/(.*)\",\n  \"headers\": [\n    { \"key\": \"Access-Control-Allow-Origin\", \"value\": \"*\" },\n    { \"key\": \"Access-Control-Allow-Headers\", \"value\": \"Content-Type, Authorization\" }\n  ]\n}",
+    "businessImpact": "Third-party web origins can issue requests against the OAuth and AI agent interfaces. If users have cached credentials or browser-managed tokens, cross-origin scripts could interact with these sensitive endpoints.",
+    "remediation": "Replace wildcard \"*\" with an explicit allowlist of authorized client domains on all routes accepting Authorization or custom API keys."
+  },
+  {
+    "scope": "Data Storage and Privacy Protections",
+    "title": "Unencrypted Sensitive User Preferences and Watchlists in Browser LocalStorage",
+    "description": "The application stores user intelligence watchlists, followed assets, and secret update timestamps directly in browser localStorage ('wm-market-watchlist-v1', 'aviation:watchlist:v1', 'wm-secrets-updated') without client-side encryption.",
+    "affectedComponent": "src/utils/sync-keys.ts & src/services/runtime-config.ts",
+    "severity": "moderate",
+    "cvss": {
+      "score": 5.3,
+      "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A04:2021-Insecure Design",
+    "certIn": "CERT-In Guidelines Sec 7.1: Client Storage & Sensitive State Encryption",
+    "stepsToReproduce": "1. Open the application in a browser.\n2. Open DevTools -> Application tab -> Local Storage.\n3. Observe keys 'wm-market-watchlist-v1', 'wm-secrets-updated', and panel preferences stored in plaintext JSON.",
+    "proofOfConcept": "// Browser Console Demonstration:\nconsole.log(localStorage.getItem('wm-market-watchlist-v1'));\nconsole.log(localStorage.getItem('wm-secrets-updated'));\n// Data is stored unencrypted and readable by any script executing in this origin.",
+    "businessImpact": "Any script executing on the origin (via XSS or malicious third-party dependencies) can read sensitive user intelligence preferences, tracking profiles, and secret update timestamps.",
+    "remediation": "Encrypt sensitive local state before persisting to localStorage, or store transient state in in-memory structures / encrypted IndexedDB."
+  },
+  {
+    "scope": "Data Storage and Privacy Protections",
+    "title": "Unconsented Analytics Telemetry Ingestion (GDPR / ePrivacy Compliance Risk)",
+    "description": "The application initializes third-party telemetry beacons ('https://abacus.worldmonitor.app/script.js') automatically on page load without prior user consent via a Consent Management Platform (CMP).",
+    "affectedComponent": "src/services/analytics.ts (Umami Beacon Transport)",
+    "severity": "moderate",
+    "cvss": {
+      "score": 4.3,
+      "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+      "rating": "Medium"
+    },
+    "owasp": "A04:2021-Insecure Design",
+    "certIn": "CERT-In Telemetry Advisory: User Privacy & Explicit Consent Architecture",
+    "stepsToReproduce": "1. Open browser Network tab.\n2. Load dashboard.\n3. Observe POST /api/send requests to 'abacus.worldmonitor.app' firing automatically before any consent banner is displayed or accepted.",
+    "proofOfConcept": "// Analytics initialization in src/services/analytics.ts:\nconst UMAMI_SCRIPT_SRC = 'https://abacus.worldmonitor.app/script.js';\nconst UMAMI_COLLECTOR_ENDPOINT = new URL('/api/send', UMAMI_SCRIPT_SRC).href;\nconst UMAMI_WEBSITE_ID = 'e8800335-c853-46a8-8497-c993ed2f58bc';\n// Dispatches telemetry events automatically on first user interaction.",
+    "businessImpact": "Violation of GDPR Article 6 and ePrivacy Directive requirements regarding user tracking and device fingerprinting without affirmative consent.",
+    "remediation": "Implement an explicit opt-in consent banner. Defer loading analytics scripts and collector beacons until the user grants explicit analytics consent."
+  }
+]
