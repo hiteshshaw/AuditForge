@@ -26,7 +26,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-const SOURCE_DIR = process.env.SOURCE_DIR || path.join(__dirname, 'worldmonitor');
+const SOURCE_DIR = process.env.SOURCE_DIR || __dirname;
 const APP_URL = process.env.APP_URL || 'http://localhost:3000';
 const HISTORY_FILE = path.join(__dirname, 'scan-history.json');
 const TARGETS_DIR = path.join(__dirname, 'targets');
