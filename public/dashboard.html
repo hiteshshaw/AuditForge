@@ -1,0 +1,2404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuditForge | Full Security Assessment</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #060911;
+      --bg-surface: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(56, 189, 248, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --cyan-glow: #38bdf8;
+      --blue-accent: #2563eb;
+      --crit: #f43f5e;
+      --crit-glow: rgba(244, 63, 94, 0.25);
+      --high: #f97316;
+      --high-glow: rgba(249, 115, 22, 0.25);
+      --mod: #eab308;
+      --mod-glow: rgba(234, 179, 8, 0.25);
+      --low: #10b981;
+      --low-glow: rgba(16, 185, 129, 0.25);
+      --info: #0ea5e9;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.5) 0px, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 36px;
+      background: rgba(11, 17, 32, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.4));
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.65));
+    }
+
+    .brand-logo svg,
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #fff, #93c5fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--cyan-glow);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .pulse-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.25);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #4ade80;
+      animation: livePulse 2s infinite;
+    }
+
+    @keyframes livePulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.3);
+        opacity: 1;
+        box-shadow: 0 0 14px #4ade80;
+      }
+
+      100% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+    }
+
+    /* 3-Line Top Right Hamburger Menu Button */
+    .hamburger-btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 10px;
+      padding: 9px 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .hamburger-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--cyan-glow);
+      transform: scale(1.05);
+    }
+
+    .ham-line {
+      width: 20px;
+      height: 2px;
+      background-color: var(--cyan-glow);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Top Right Options Dropdown Menu */
+    .options-menu-dropdown {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      width: 310px;
+      background: rgba(11, 17, 32, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 200;
+      animation: menuSlideDown 0.25s ease-out forwards;
+    }
+
+    .options-menu-dropdown.active {
+      display: flex;
+    }
+
+    @keyframes menuSlideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--cyan-glow);
+      padding: 4px 8px 8px;
+      font-family: var(--font-mono);
+    }
+
+    .menu-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .menu-close-btn:hover {
+      color: #fff;
+    }
+
+    .menu-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 4px 0;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .menu-item:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 3px solid var(--cyan-glow);
+    }
+
+    .menu-icon {
+      font-size: 1.1rem;
+    }
+
+    .menu-text b {
+      display: block;
+      font-size: 0.84rem;
+      color: #fff;
+    }
+
+    .menu-text small {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.5));
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 30px 36px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #38bdf8, #2563eb);
+    }
+
+    .hero-content h2 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .target-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .target-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .target-chip span {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .target-chip-toggle {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .target-chip-toggle:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+    }
+
+    .regression-strip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 12px;
+      padding: 6px 14px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      width: 100%;
+    }
+
+    .reg-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .reg-item.new {
+      color: #f87171;
+      font-weight: 600;
+    }
+
+    .reg-item.fixed {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    .reg-item.open {
+      color: #facc15;
+      font-weight: 600;
+    }
+
+    .reg-item.history {
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    /* Score Widget */
+    .risk-gauge-box {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px 22px;
+    }
+
+    .gauge-circle {
+      position: relative;
+      width: 76px;
+      height: 76px;
+    }
+
+    .gauge-circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 6;
+      fill: none;
+    }
+
+    .gauge-bar {
+      stroke: var(--high);
+      stroke-width: 6;
+      stroke-linecap: round;
+      fill: none;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 65;
+      transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
+    }
+
+    .gauge-val {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: #fff;
+    }
+
+    .gauge-info b {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .gauge-info span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .grade-badge {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Bring Your Own Target Bar */
+    .byot-bar {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.75));
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .byot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #f8fafc;
+    }
+
+    .byot-presets {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .preset-btn {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #38bdf8;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: #38bdf8;
+    }
+
+    .byot-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 14px;
+      align-items: end;
+    }
+
+    @media (max-width: 768px) {
+      .byot-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .byot-input-group label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--cyan-glow);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .byot-input-group input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.84rem;
+      font-family: var(--font-mono);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .byot-input-group input:focus {
+      border-color: var(--cyan-glow);
+    }
+
+    .btn-byot-scan {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-byot-scan:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+
+    /* Interactive Toolbar */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+
+    .action-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-run {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-run:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.15);
+      box-shadow: 0 6px 26px rgba(37, 99, 235, 0.6);
+    }
+
+    .btn-run svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .btn-export {
+      background: rgba(30, 41, 59, 0.7);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-export:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .search-wrapper {
+      position: relative;
+      min-width: 260px;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 14px 10px 38px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-wrapper input:focus {
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-dim);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Scan Progress Bar Strip */
+    .scan-progress-strip {
+      display: none;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.85));
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 14px;
+      padding: 16px 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .scan-progress-strip:hover {
+      transform: translateY(-3px) scale(1.005);
+      border-color: var(--cyan-glow);
+      box-shadow: 0 12px 35px rgba(56, 189, 248, 0.35), inset 0 0 20px rgba(56, 189, 248, 0.25);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(14, 165, 233, 0.15));
+    }
+
+    .scan-progress-strip::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.18), transparent);
+      animation: scanBeam 2.5s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes scanBeam {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .scan-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--cyan-glow);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 35%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(90deg, #38bdf8, #60a5fa, #818cf8);
+      border-radius: 999px;
+      box-shadow: 0 0 16px #38bdf8, 0 0 8px #60a5fa;
+      animation: sweepLine 1.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes sweepLine {
+      0% {
+        left: 0%;
+      }
+
+      100% {
+        left: 65%;
+      }
+    }
+
+    /* Executive Metrics Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px 22px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .metric-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-count {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .metric-sub {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+    }
+
+    /* Scope Filter Tabs */
+    .scope-tabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    .tab-pill {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-pill:hover {
+      background: var(--bg-card-hover);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .tab-pill.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(37, 99, 235, 0.4));
+      color: #fff;
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+    }
+
+    .tab-badge {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--cyan-glow);
+    }
+
+    /* Findings Accordion List */
+    .scope-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .scope-section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .scope-counter {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--cyan-glow);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .vuln-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .vuln-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.6);
+    }
+
+    .vuln-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+    }
+
+    .vuln-card.critical::before {
+      background: var(--crit);
+    }
+
+    .vuln-card.high::before {
+      background: var(--high);
+    }
+
+    .vuln-card.moderate::before {
+      background: var(--mod);
+    }
+
+    .vuln-card.low::before {
+      background: var(--low);
+    }
+
+    .vuln-card.info::before {
+      background: var(--info);
+    }
+
+    .vuln-header {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      gap: 16px;
+    }
+
+    .vuln-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .vuln-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.35;
+    }
+
+    .sev-pill {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .sev-pill.critical {
+      background: var(--crit-glow);
+      color: var(--crit);
+      border: 1px solid var(--crit);
+    }
+
+    .sev-pill.high {
+      background: var(--high-glow);
+      color: var(--high);
+      border: 1px solid var(--high);
+    }
+
+    .sev-pill.moderate {
+      background: var(--mod-glow);
+      color: var(--mod);
+      border: 1px solid var(--mod);
+    }
+
+    .sev-pill.low {
+      background: var(--low-glow);
+      color: var(--low);
+      border: 1px solid var(--low);
+    }
+
+    .sev-pill.info {
+      background: rgba(14, 165, 233, 0.15);
+      color: var(--info);
+      border: 1px solid var(--info);
+    }
+
+    .cvss-pill {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #38bdf8;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .compliance-badge {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .compliance-badge.certin {
+      border-color: rgba(234, 179, 8, 0.4);
+      color: #fde047;
+      background: rgba(234, 179, 8, 0.12);
+    }
+
+    .chevron-icon {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-dim);
+      stroke-width: 2;
+      fill: none;
+      transition: transform 0.2s ease;
+    }
+
+    .vuln-card.expanded .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .vuln-body {
+      padding: 0 24px 22px;
+      display: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .vuln-card.expanded .vuln-body {
+      display: block;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .detail-item b {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .component-tag {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #38bdf8;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .terminal-box {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .terminal-topbar {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .w-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .w-dot.red {
+      background: #f43f5e;
+    }
+
+    .w-dot.yellow {
+      background: #eab308;
+    }
+
+    .w-dot.green {
+      background: #10b981;
+    }
+
+    .terminal-title {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+    }
+
+    .copy-btn {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .terminal-code {
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.6;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .alert-box {
+      border-radius: 8px;
+      padding: 10px 14px;
+      line-height: 1.5;
+    }
+
+    .alert-box.impact {
+      background: rgba(244, 63, 94, 0.08);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+    }
+
+    .alert-box.remediation {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #a7f3d0;
+    }
+
+    /* Empty State */
+    .empty-box {
+      text-align: center;
+      padding: 64px 20px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 16px;
+    }
+
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      stroke: var(--text-dim);
+      fill: none;
+      stroke-width: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .empty-box h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .empty-box p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: #0f172a;
+      border: 1px solid var(--cyan-glow);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 14px 20px;
+      }
+
+      .hero-banner {
+        grid-template-columns: 1fr;
+      }
+
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    @media print {
+
+      .navbar,
+      .action-bar,
+      .scope-tabs-bar,
+      .btn-run,
+      .btn-export,
+      .toast-container,
+      .byot-bar {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+        color: #000;
+      }
+
+      .vuln-card {
+        break-inside: avoid;
+        border: 1px solid #ccc;
+        background: #fff;
+        color: #000;
+        margin-bottom: 20px;
+      }
+
+      .vuln-body {
+        display: block !important;
+      }
+
+      .terminal-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+      }
+
+      #canvas-3d-bg {
+        display: none !important;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="logo.svg" alt="AuditForge Logo">
+      </div>
+      <div class="brand-text">
+        <h1>AuditForge Auditor</h1>
+        <p>Real-Time Enterprise Security Suite</p>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <a href="index.html"
+        style="display: flex; align-items: center; gap: 6px; color: var(--cyan-glow); font-size: 0.82rem; font-weight: 600; text-decoration: none; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 14px; border-radius: 8px; transition: all 0.2s ease;">
+        <span>← Home Page</span>
+      </a>
+      <div class="pulse-indicator">
+        <div class="pulse-dot"></div>
+        <span id="scan-state-text">AUDITOR ENGINE READY</span>
+      </div>
+
+      <!-- 3-Line Top Right Hamburger Menu Button -->
+      <button class="hamburger-btn" id="hamburger-btn" onclick="toggleOptionsMenu()" title="Menu Options">
+        <div class="ham-line"></div>
+        <div class="ham-line"></div>
+        <div class="ham-line"></div>
+      </button>
+
+      <!-- Top Right Options Dropdown Menu -->
+      <div class="options-menu-dropdown" id="options-menu">
+        <div class="menu-header">
+          <span>⚙️ AuditForge Control Panel</span>
+          <button class="menu-close-btn" onclick="toggleOptionsMenu()">✕</button>
+        </div>
+        <div class="menu-divider"></div>
+        <a class="menu-item" href="index.html">
+          <span class="menu-icon">🏠</span>
+          <div class="menu-text">
+            <b>Home Page</b>
+            <small>Return to main landing experience</small>
+          </div>
+        </a>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="startScan(); toggleOptionsMenu();">
+          <span class="menu-icon">⚡</span>
+          <div class="menu-text">
+            <b>Run Full Assessment</b>
+            <small>Audits all 7 security evaluation scopes</small>
+          </div>
+        </button>
+        <button class="menu-item" onclick="toggleByotPanel(); toggleOptionsMenu();">
+          <span class="menu-icon">🌐</span>
+          <div class="menu-text">
+            <b>Bring Your Own Target</b>
+            <small>Scan any public GitHub repository</small>
+          </div>
+        </button>
+        <div class="menu-divider"></div>
+        <a class="menu-item" href="/api/export-report?format=markdown" download="security-assessment-report.md"
+          onclick="showToast('Exporting Markdown Report...'); toggleOptionsMenu();">
+          <span class="menu-icon">📄</span>
+          <div class="menu-text">
+            <b>Export Report (Markdown)</b>
+            <small>Formatted security report</small>
+          </div>
+        </a>
+        <a class="menu-item" href="/api/export-report?format=json" download="security-assessment-report.json"
+          onclick="showToast('Exporting JSON Data...'); toggleOptionsMenu();">
+          <span class="menu-icon">📊</span>
+          <div class="menu-text">
+            <b>Export Findings (JSON)</b>
+            <small>Machine-readable payload</small>
+          </div>
+        </a>
+        <button class="menu-item" onclick="window.print(); toggleOptionsMenu();">
+          <span class="menu-icon">🖨️</span>
+          <div class="menu-text">
+            <b>Print / Save PDF Report</b>
+            <small>Print-formatted presentation</small>
+          </div>
+        </button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="togglePrivacyMask(); toggleOptionsMenu();">
+          <span class="menu-icon">🔒</span>
+          <div class="menu-text">
+            <b>Toggle Privacy Masking</b>
+            <small>Sanitize internal paths for demo</small>
+          </div>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <h2>Full Security Assessment & Audit</h2>
+        <div class="regression-strip">
+          <span class="reg-item new">🆕 <b id="reg-new">0</b> New</span>
+          <span class="reg-item fixed">✅ <b id="reg-fixed">0</b> Fixed</span>
+          <span class="reg-item open">⚠️ <b id="reg-open">0</b> Open</span>
+          <span class="reg-item history" id="reg-history-text">Scan Run #1</span>
+        </div>
+      </div>
+      <div class="risk-gauge-box">
+        <div class="gauge-circle">
+          <svg width="76" height="76">
+            <circle class="gauge-bg" cx="38" cy="38" r="32"></circle>
+            <circle class="gauge-bar" id="gauge-bar" cx="38" cy="38" r="32"></circle>
+          </svg>
+          <div class="gauge-val" id="risk-score">--</div>
+        </div>
+        <div class="gauge-info">
+          <b id="risk-label">Score: -- <span class="grade-badge" id="grade-badge">--</span></b>
+          <span id="risk-desc">Click Run Full Assessment</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bring Your Own Target Bar -->
+    <div class="byot-bar">
+      <div class="byot-header">
+        <span>🌐 <b>Bring Your Own Target</b> — Audit Any Public GitHub Repository & Endpoint</span>
+        <div class="byot-presets">
+          <span>Quick Presets:</span>
+          <button class="preset-btn" onclick="applyPreset('default')">World Monitor (Local)</button>
+          <button class="preset-btn" onclick="applyPreset('express')">Express.js (GitHub)</button>
+        </div>
+      </div>
+      <div class="byot-inputs">
+        <div class="byot-input-group">
+          <label>GitHub Repository URL</label>
+          <input type="text" id="byot-repo" placeholder="https://github.com/expressjs/express.git">
+        </div>
+        <div class="byot-input-group">
+          <label>Target Web URL (Optional)</label>
+          <input type="text" id="byot-url" placeholder="http://localhost:3000">
+        </div>
+        <button class="btn-byot-scan" onclick="runCustomTargetScan()">
+          <span>🚀 Clone & Scan Target</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <div class="action-left">
+        <button class="btn-run" id="btn-run-scan" onclick="startScan()">
+          <svg viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          <span>Run Full Assessment</span>
+        </button>
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="search-input" placeholder="Search findings, CVEs, packages..."
+            oninput="handleSearch(this.value)">
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a class="btn-export" href="/api/export-report?format=markdown"
+          download="security-assessment-report.md" onclick="showToast('Exporting Markdown Report...')">
+          📄 Download Markdown
+        </a>
+        <a class="btn-export" href="/api/export-report?format=json" download="security-assessment-report.json"
+          onclick="showToast('Exporting JSON Data...')">
+          📊 Download JSON
+        </a>
+        <button class="btn-export" onclick="window.print()">
+          🖨️ Print / PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Scan Progress Bar -->
+    <div class="scan-progress-strip" id="scan-progress">
+      <div class="scan-progress-label">
+        <span id="progress-step-text">Executing automated probes across 7 security scopes...</span>
+        <span id="progress-pct">Scanning...</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Executive Metrics Row -->
+    <div class="metrics-row">
+      <div class="metric-card total" onclick="filterBySeverity('ALL')">
+        <div class="metric-header">
+          <span class="metric-label">Total Findings</span>
+          <span class="metric-icon-badge">🛡️</span>
+        </div>
+        <div class="metric-count" id="count-total">0</div>
+        <div class="metric-sub">Across 7 evaluation areas</div>
+      </div>
+      <div class="metric-card critical" onclick="filterBySeverity('critical')">
+        <div class="metric-header">
+          <span class="metric-label">Critical</span>
+          <span class="metric-icon-badge">🔴</span>
+        </div>
+        <div class="metric-count" id="count-critical" style="color:var(--crit)">0</div>
+        <div class="metric-sub">Immediate action required</div>
+      </div>
+      <div class="metric-card high" onclick="filterBySeverity('high')">
+        <div class="metric-header">
+          <span class="metric-label">High Severity</span>
+          <span class="metric-icon-badge">🟠</span>
+        </div>
+        <div class="metric-count" id="count-high" style="color:var(--high)">0</div>
+        <div class="metric-sub">Significant risk vectors</div>
+      </div>
+      <div class="metric-card moderate" onclick="filterBySeverity('moderate')">
+        <div class="metric-header">
+          <span class="metric-label">Moderate</span>
+          <span class="metric-icon-badge">🟡</span>
+        </div>
+        <div class="metric-count" id="count-moderate" style="color:var(--mod)">0</div>
+        <div class="metric-sub">Defense-in-depth gaps</div>
+      </div>
+      <div class="metric-card low" onclick="filterBySeverity('low')">
+        <div class="metric-header">
+          <span class="metric-label">Low / Info</span>
+          <span class="metric-icon-badge">🟢</span>
+        </div>
+        <div class="metric-count" id="count-low" style="color:var(--low)">0</div>
+        <div class="metric-sub">Informational / Best practice</div>
+      </div>
+    </div>
+
+    <!-- Scope Tabs Bar -->
+    <div class="scope-tabs-bar" id="scope-tabs">
+      <button class="tab-pill active" onclick="setScope('ALL')">
+        🛡️ All Scopes <span class="tab-badge" id="badge-all">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('Authentication and Session Management')">
+        🔑 Auth & Session <span class="tab-badge" id="badge-auth">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('Authorization and Access Control')">
+        🚪 Access Control <span class="tab-badge" id="badge-access">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('Input Validation and Data Handling')">
+        ⚡ Input Validation <span class="tab-badge" id="badge-input">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('API Security')">
+        🌐 API Security <span class="tab-badge" id="badge-api">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('Client-Side Security Controls')">
+        💻 Client Controls <span class="tab-badge" id="badge-client">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('Secure Communication Mechanisms')">
+        🔒 Secure Comm <span class="tab-badge" id="badge-comm">0</span>
+      </button>
+      <button class="tab-pill" onclick="setScope('Data Storage and Privacy Protections')">
+        📦 Storage & Privacy <span class="tab-badge" id="badge-privacy">0</span>
+      </button>
+    </div>
+
+    <!-- Findings Container -->
+    <div id="findings-wrapper">
+      <div class="empty-box">
+        <svg class="empty-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <h3>Ready to Initiate Audit</h3>
+        <p>Click "Run Full Assessment" above to run automated checks across all 7 evaluation areas.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Feedback Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    let allFindings = [];
+    let activeScope = 'ALL';
+    let activeSeverity = 'ALL';
+    let searchQuery = '';
+
+    let rawConfig = { APP_URL: 'http://localhost:3000', SOURCE_DIR: 'D:\\2\\worldmonitor' };
+    let isMasked = true;
+
+    async function loadConfig() {
+      try {
+        const res = await fetch('/api/config');
+        rawConfig = await res.json();
+        renderConfigChips();
+      } catch (e) {
+        console.error('Config load failed', e);
+      }
+    }
+
+    function renderConfigChips() {
+      const urlEl = document.getElementById('tgt-url');
+      const dirEl = document.getElementById('tgt-dir');
+      const toggleBtn = document.getElementById('btn-toggle-mask');
+      if (isMasked) {
+        if (urlEl) urlEl.innerText = 'Protected Target Scope';
+        if (dirEl) dirEl.innerText = 'Encrypted Workspace Path';
+        if (toggleBtn) toggleBtn.innerText = '🔒 Masked for Privacy';
+      } else {
+        if (urlEl) urlEl.innerText = rawConfig.APP_URL;
+        if (dirEl) dirEl.innerText = rawConfig.SOURCE_DIR;
+        if (toggleBtn) toggleBtn.innerText = '👁️ Exposed (Local)';
+      }
+    }
+
+    function togglePrivacyMask() {
+      isMasked = !isMasked;
+      renderConfigChips();
+      showToast(isMasked ? 'Privacy mask enabled' : 'Internal debug values exposed');
+    }
+
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<span>✓</span> <span>${msg}</span>`;
+      container.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(10px)';
+        t.style.transition = 'all 0.3s';
+        setTimeout(() => t.remove(), 300);
+      }, 2500);
+    }
+
+    function copyCode(id) {
+      const codeEl = document.getElementById(id);
+      if (!codeEl) return;
+      navigator.clipboard.writeText(codeEl.innerText).then(() => {
+        showToast('Proof of Concept copied to clipboard!');
+      });
+    }
+
+    function toggleCard(cardEl) {
+      cardEl.classList.toggle('expanded');
+    }
+
+    function updateBadgesAndCounters(scanResponse) {
+      const findings = scanResponse.findings || scanResponse || [];
+      const score = scanResponse.securityScore !== undefined ? scanResponse.securityScore : 100;
+      const grade = scanResponse.securityGrade || 'A+';
+      const reg = scanResponse.regression || { newCount: 0, fixedCount: 0, openCount: findings.length, scanCount: 1 };
+
+      const counts = {
+        total: findings.length,
+        critical: 0,
+        high: 0,
+        moderate: 0,
+        low: 0,
+        auth: 0,
+        access: 0,
+        input: 0,
+        api: 0,
+        client: 0,
+        comm: 0,
+        privacy: 0
+      };
+
+      findings.forEach(f => {
+        const sev = (f.severity || 'info').toLowerCase();
+        if (sev === 'critical') counts.critical++;
+        else if (sev === 'high') counts.high++;
+        else if (sev === 'moderate') counts.moderate++;
+        else counts.low++;
+
+        const sc = f.scope;
+        if (sc.includes('Authentication')) counts.auth++;
+        else if (sc.includes('Authorization')) counts.access++;
+        else if (sc.includes('Input Validation')) counts.input++;
+        else if (sc.includes('API Security')) counts.api++;
+        else if (sc.includes('Client-Side')) counts.client++;
+        else if (sc.includes('Communication')) counts.comm++;
+        else if (sc.includes('Data Storage')) counts.privacy++;
+      });
+
+      document.getElementById('count-total').innerText = counts.total;
+      document.getElementById('count-critical').innerText = counts.critical;
+      document.getElementById('count-high').innerText = counts.high;
+      document.getElementById('count-moderate').innerText = counts.moderate;
+      document.getElementById('count-low').innerText = counts.low;
+
+      document.getElementById('badge-all').innerText = counts.total;
+      document.getElementById('badge-auth').innerText = counts.auth;
+      document.getElementById('badge-access').innerText = counts.access;
+      document.getElementById('badge-input').innerText = counts.input;
+      document.getElementById('badge-api').innerText = counts.api;
+      document.getElementById('badge-client').innerText = counts.client;
+      document.getElementById('badge-comm').innerText = counts.comm;
+      document.getElementById('badge-privacy').innerText = counts.privacy;
+
+      // Render Posture Score & Circular Gauge
+      document.getElementById('risk-score').innerText = score;
+      document.getElementById('grade-badge').innerText = grade;
+
+      document.getElementById('reg-new').innerText = reg.newCount;
+      document.getElementById('reg-fixed').innerText = reg.fixedCount;
+      document.getElementById('reg-open').innerText = reg.openCount;
+      document.getElementById('reg-history-text').innerText = `Scan Run #${reg.scanCount || 1}`;
+
+      const bar = document.getElementById('gauge-bar');
+      if (bar) {
+        const offset = 200 - (200 * (score / 100));
+        bar.style.strokeDashoffset = offset;
+        if (score >= 80) bar.style.stroke = '#4ade80';
+        else if (score >= 60) bar.style.stroke = 'var(--high)';
+        else bar.style.stroke = 'var(--crit)';
+      }
+
+      const label = document.getElementById('risk-label');
+      const desc = document.getElementById('risk-desc');
+      if (label) label.innerHTML = `Score: ${score} <span class="grade-badge" id="grade-badge">${grade}</span>`;
+      if (desc) {
+        if (score < 50) {
+          desc.innerText = `${counts.critical} Critical, ${counts.high} High Issues`;
+        } else if (score < 80) {
+          desc.innerText = `${counts.total} Findings require remediation`;
+        } else {
+          desc.innerText = 'Strong security posture maintained';
+        }
+      }
+    }
+
+    function renderFindings() {
+      const container = document.getElementById('findings-wrapper');
+
+      let list = allFindings;
+      if (activeScope !== 'ALL') {
+        list = list.filter(f => f.scope === activeScope);
+      }
+      if (activeSeverity !== 'ALL') {
+        const act = activeSeverity.toLowerCase();
+        list = list.filter(f => {
+          const sev = (f.severity || 'info').toLowerCase();
+          if (act === 'low' || act === 'info') {
+            return sev === 'low' || sev === 'info' || sev === 'informational';
+          }
+          return sev === act;
+        });
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(f =>
+          f.title.toLowerCase().includes(q) ||
+          (f.description && f.description.toLowerCase().includes(q)) ||
+          (f.affectedComponent && f.affectedComponent.toLowerCase().includes(q)) ||
+          (f.scope && f.scope.toLowerCase().includes(q)) ||
+          (f.owasp && f.owasp.toLowerCase().includes(q)) ||
+          (f.certIn && f.certIn.toLowerCase().includes(q))
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+      <div class="empty-box">
+        <svg class="empty-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <h3>No Matching Findings</h3>
+        <p>No vulnerabilities match the active filters or search terms.</p>
+      </div>`;
+        return;
+      }
+
+      // Group findings by Scope
+      const groups = {};
+      list.forEach(f => {
+        (groups[f.scope] = groups[f.scope] || []).push(f);
+      });
+
+      let html = '';
+      let idIndex = 0;
+
+      for (const [scopeName, items] of Object.entries(groups)) {
+        html += `
+      <div class="scope-section-header">
+        <div class="scope-section-title">
+          <span>🛡️ ${scopeName}</span>
+          <span class="scope-counter">${items.length}</span>
+        </div>
+      </div>`;
+
+        items.forEach(f => {
+          idIndex++;
+          const pocId = `poc-term-${idIndex}`;
+          const sev = (f.severity || 'info').toLowerCase();
+          const cvssScore = f.cvss ? f.cvss.score : 'N/A';
+          const cvssRating = f.cvss ? (f.cvss.rating || sev.toUpperCase()) : sev.toUpperCase();
+          const cvssVector = f.cvss && f.cvss.vector ? f.cvss.vector : '';
+
+          html += `
+      <div class="vuln-card ${sev}">
+        <div class="vuln-header" onclick="toggleCard(this.parentElement)">
+          <div class="vuln-title-group">
+            <span class="sev-pill ${sev}">${sev}</span>
+            <span class="cvss-pill" title="${cvssVector}">CVSS ${cvssScore} · ${cvssRating}</span>
+            ${f.owasp ? `<span class="compliance-badge" title="OWASP Top 10 Mapping">${f.owasp}</span>` : ''}
+            ${f.certIn ? `<span class="compliance-badge certin" title="CERT-In Security Guideline">${f.certIn}</span>` : ''}
+            <div class="vuln-title">${f.title}</div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="vuln-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <b>Affected Component</b>
+              <span class="component-tag">${f.affectedComponent || 'N/A'}</span>
+            </div>
+            ${f.owasp || f.certIn ? `
+            <div class="detail-item">
+              <b>Compliance & Regulatory Framework Alignment</b>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+                ${f.owasp ? `<span class="compliance-badge">OWASP: ${f.owasp}</span>` : ''}
+                ${f.certIn ? `<span class="compliance-badge certin">CERT-In: ${f.certIn}</span>` : ''}
+              </div>
+            </div>` : ''}
+            <div class="detail-item">
+              <b>Vulnerability Description</b>
+              <div style="color:#cbd5e1; line-height:1.5;">${f.description}</div>
+            </div>
+            ${f.stepsToReproduce ? `
+            <div class="detail-item">
+              <b>Steps to Reproduce</b>
+              <div class="terminal-box">
+                <div class="terminal-topbar">
+                  <div class="window-dots"><div class="w-dot red"></div><div class="w-dot yellow"></div><div class="w-dot green"></div></div>
+                  <div class="terminal-title">Reproduction Execution Guide</div>
+                  <div></div>
+                </div>
+                <div class="terminal-code" style="color:#93c5fd">${f.stepsToReproduce}</div>
+              </div>
+            </div>` : ''}
+            ${f.proofOfConcept ? `
+            <div class="detail-item">
+              <b>Safe Proof of Concept (Demonstration)</b>
+              <div class="terminal-box">
+                <div class="terminal-topbar">
+                  <div class="window-dots"><div class="w-dot red"></div><div class="w-dot yellow"></div><div class="w-dot green"></div></div>
+                  <div class="terminal-title">Controlled Environment PoC Payload</div>
+                  <button class="copy-btn" onclick="copyCode('${pocId}')">Copy PoC</button>
+                </div>
+                <div class="terminal-code" id="${pocId}">${f.proofOfConcept}</div>
+              </div>
+            </div>` : ''}
+            ${f.businessImpact ? `
+            <div class="detail-item">
+              <b>Business Impact Assessment</b>
+              <div class="alert-box impact">⚠️ ${f.businessImpact}</div>
+            </div>` : ''}
+            ${f.remediation ? `
+            <div class="detail-item">
+              <b>Remediation Recommendations</b>
+              <div class="alert-box remediation">🛡️ ${f.remediation}</div>
+            </div>` : ''}
+          </div>
+        </div>
+      </div>`;
+        });
+      }
+
+      container.innerHTML = html;
+    }
+
+    function setScope(scope) {
+      activeScope = scope;
+      document.querySelectorAll('.tab-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(scope) || (scope === 'ALL' && btn.innerText.includes('All')));
+      });
+      renderFindings();
+    }
+
+    function filterBySeverity(sev) {
+      activeSeverity = activeSeverity === sev ? 'ALL' : sev;
+      document.querySelectorAll('.metric-card').forEach(card => {
+        card.style.transform = card.classList.contains(sev) && activeSeverity !== 'ALL' ? 'scale(1.03)' : 'none';
+      });
+      renderFindings();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim();
+      renderFindings();
+    }
+
+    async function startScan() {
+      const btn = document.getElementById('btn-run-scan');
+      const progressStrip = document.getElementById('scan-progress');
+      const statusText = document.getElementById('scan-state-text');
+
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+      btn.innerHTML = `<svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" stroke-dasharray="32"/></svg> <span>Auditing Application...</span>`;
+      progressStrip.style.display = 'block';
+      statusText.innerText = 'FULL AUDIT ACTIVE (7 SCOPES)';
+      statusText.style.color = 'var(--cyan-glow)';
+
+      try {
+        const res = await fetch('/api/full-scan');
+        const data = await res.json();
+        allFindings = data.findings || [];
+        updateBadgesAndCounters(data);
+        renderFindings();
+        showToast(`Audit complete! ${allFindings.length} findings recorded.`);
+        statusText.innerText = 'AUDIT COMPLETE';
+        statusText.style.color = '#4ade80';
+      } catch (err) {
+        showToast('Scan execution failed: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span>Run Full Assessment</span>`;
+        progressStrip.style.display = 'none';
+      }
+    }
+
+    function applyPreset(type) {
+      const repoInput = document.getElementById('byot-repo');
+      const urlInput = document.getElementById('byot-url');
+      if (type === 'default') {
+        repoInput.value = '';
+        urlInput.value = rawConfig.APP_URL || 'http://localhost:3000';
+        showToast('Applied World Monitor local preset');
+      } else if (type === 'express') {
+        repoInput.value = 'https://github.com/expressjs/express.git';
+        urlInput.value = 'http://localhost:3000';
+        showToast('Applied Express.js repository preset');
+      }
+    }
+
+    async function runCustomTargetScan() {
+      const repoUrl = document.getElementById('byot-repo').value.trim();
+      const appUrl = document.getElementById('byot-url').value.trim();
+
+      const progressStrip = document.getElementById('scan-progress');
+      const statusText = document.getElementById('scan-state-text');
+      const stepText = document.getElementById('progress-step-text');
+
+      progressStrip.style.display = 'block';
+      statusText.innerText = repoUrl ? 'CLONING & AUDITING TARGET' : 'AUDITING TARGET';
+      statusText.style.color = 'var(--cyan-glow)';
+      stepText.innerText = repoUrl ? `Cloning ${repoUrl} and evaluating 7 security scopes...` : 'Evaluating target across 7 security scopes...';
+
+      try {
+        const res = await fetch('/api/scan-custom-target', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ repoUrl, appUrl })
+        });
+        const data = await res.json();
+        allFindings = data.findings || [];
+
+        if (data.sourceDir) document.getElementById('tgt-dir').innerText = data.sourceDir;
+        if (data.appUrl) document.getElementById('tgt-url').innerText = data.appUrl;
+
+        updateBadgesAndCounters(data);
+        renderFindings();
+        showToast(`Custom target scan complete! ${allFindings.length} findings recorded.`);
+        statusText.innerText = 'AUDIT COMPLETE';
+        statusText.style.color = '#4ade80';
+      } catch (err) {
+        showToast('Custom target scan failed: ' + err.message);
+      } finally {
+        progressStrip.style.display = 'none';
+      }
+    }
+
+    function toggleOptionsMenu() {
+      const menu = document.getElementById('options-menu');
+      if (menu) menu.classList.toggle('active');
+    }
+
+    function toggleByotPanel() {
+      const byotBar = document.querySelector('.byot-bar');
+      if (byotBar) {
+        byotBar.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Close options menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('options-menu');
+      const btn = document.getElementById('hamburger-btn');
+      if (menu && menu.classList.contains('active')) {
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+          menu.classList.remove('active');
+        }
+      }
+    });
+
+    loadConfig().then(async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetParam = urlParams.get('target');
+      const scopeParam = urlParams.get('scope');
+
+      if (targetParam) {
+        document.getElementById('byot-repo').value = targetParam;
+        await runCustomTargetScan();
+      } else {
+        await startScan();
+      }
+
+      if (scopeParam) {
+        setScope(scopeParam);
+      }
+    });
+  </script>
+  <!-- Floating AI Copilot Widget -->
+  <style>
+    .copilot-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 999px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(37, 99, 235, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+      transition: all 0.25s ease;
+    }
+
+    .copilot-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 40px rgba(56, 189, 248, 0.6);
+    }
+
+    .copilot-window {
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 390px;
+      height: 560px;
+      background: rgba(11, 17, 32, 0.96);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+      display: none;
+      flex-direction: column;
+      z-index: 1001;
+      overflow: hidden;
+      animation: copilotSlide 0.25s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+    }
+
+    .copilot-window.active {
+      display: flex;
+    }
+
+    @keyframes copilotSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .copilot-header {
+      padding: 14px 18px;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .copilot-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .copilot-badge {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--cyan-glow);
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+    }
+
+    .copilot-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .copilot-icon-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .copilot-icon-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .copilot-key-panel {
+      display: none;
+      padding: 12px 16px;
+      background: rgba(30, 41, 59, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+    }
+
+    .copilot-key-panel.active {
+      display: block;
+    }
+
+    .copilot-key-input {
+      width: 100%;
+      background: rgba(6, 9, 17, 0.8);
+      border: 1px solid var(--border-hover);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      margin: 6px 0 8px;
+      outline: none;
+    }
+
+    .copilot-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.84rem;
+    }
+
+    .copilot-msg {
+      max-width: 86%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .copilot-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      border-bottom-right-radius: 3px;
+    }
+
+    .copilot-msg.ai {
+      align-self: flex-start;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border-bottom-left-radius: 3px;
+    }
+
+    .copilot-msg code {
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--cyan-glow);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    .copilot-chips {
+      padding: 8px 16px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      background: rgba(6, 9, 17, 0.5);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .copilot-chip {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--cyan-glow);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .copilot-chip:hover {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: var(--cyan-glow);
+    }
+
+    .copilot-input-area {
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      gap: 8px;
+    }
+
+    .copilot-input-area input {
+      flex: 1;
+      background: rgba(6, 9, 17, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .copilot-input-area input:focus {
+      border-color: var(--cyan-glow);
+    }
+
+    .copilot-send-btn {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border: none;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+  </style>
+
+  <button class="copilot-btn" onclick="toggleCopilotModal()">
+    <span>🤖 AI Copilot</span>
+    <span style="width:8px; height:8px; background:#4ade80; border-radius:50%; box-shadow:0 0 8px #4ade80;"></span>
+  </button>
+
+  <div class="copilot-window" id="copilot-window">
+    <div class="copilot-header">
+      <div class="copilot-title">
+        <span>🤖 AuditForge Copilot</span>
+        <span class="copilot-badge">Groq llama-3.3-70b</span>
+      </div>
+      <div class="copilot-header-actions">
+        <button class="copilot-icon-btn" onclick="toggleKeyPanel()" title="Groq API Key Settings">⚙️</button>
+        <button class="copilot-icon-btn" onclick="toggleCopilotModal()">✕</button>
+      </div>
+    </div>
+
+    <div class="copilot-key-panel" id="copilot-key-panel">
+      <div style="font-weight:700; color:var(--cyan-glow); margin-bottom:4px;">Groq API Key Configuration</div>
+      <div style="color:var(--text-muted); font-size:0.75rem;">Enter your Groq key (<code>gsk_...</code>) for live AI
+        threat analysis.</div>
+      <input type="password" id="groq-key-input" class="copilot-key-input" placeholder="gsk_..."
+        onchange="saveGroqKey(this.value)">
+      <div style="font-size:0.7rem; color:#4ade80;" id="key-saved-msg"></div>
+    </div>
+
+    <div class="copilot-messages" id="copilot-messages">
+      <div class="copilot-msg ai">
+        <b>👋 Welcome to AuditForge AI Copilot!</b><br>
+        I am trained on all <b>7 Security Scopes</b>, <b>CERT-In Guidelines</b>, <b>OWASP Top 10</b>, and your active
+        audit findings.<br><br>
+        How can I assist your security audit today?
+      </div>
+    </div>
+
+    <div class="copilot-chips">
+      <button class="copilot-chip" onclick="sendChip('How to fix DOM XSS in dom-utils.ts?')">Fix DOM XSS</button>
+      <button class="copilot-chip" onclick="sendChip('Explain the 17 High Severity findings')">17 High Findings</button>
+      <button class="copilot-chip" onclick="sendChip('How to fix missing Content-Security-Policy?')">Fix CSP
+        Headers</button>
+      <button class="copilot-chip" onclick="sendChip('Explain CERT-In compliance mapping')">CERT-In Rules</button>
+    </div>
+
+    <div class="copilot-input-area">
+      <input type="text" id="copilot-input" placeholder="Ask AI Security Copilot..."
+        onkeydown="if(event.key==='Enter') sendCopilotMsg()">
+      <button class="copilot-send-btn" onclick="sendCopilotMsg()">🚀</button>
+    </div>
+  </div>
+
+  <script>
+    let chatHistory = [];
+
+    function toggleCopilotModal() {
+      const win = document.getElementById('copilot-window');
+      win.classList.toggle('active');
+      const savedKey = localStorage.getItem('groq_api_key');
+      if (savedKey) {
+        document.getElementById('groq-key-input').value = savedKey;
+      }
+    }
+
+    function toggleKeyPanel() {
+      const panel = document.getElementById('copilot-key-panel');
+      panel.classList.toggle('active');
+    }
+
+    function saveGroqKey(val) {
+      if (val) {
+        localStorage.setItem('groq_api_key', val.trim());
+        document.getElementById('key-saved-msg').innerText = '✓ Groq API Key saved!';
+      }
+    }
+
+    function sendChip(txt) {
+      document.getElementById('copilot-input').value = txt;
+      sendCopilotMsg();
+    }
+
+    async function sendCopilotMsg() {
+      const input = document.getElementById('copilot-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const msgsContainer = document.getElementById('copilot-messages');
+
+      // Append user message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'copilot-msg user';
+      userDiv.innerText = msg;
+      msgsContainer.appendChild(userDiv);
+
+      input.value = '';
+      msgsContainer.scrollTop = msgsContainer.scrollHeight;
+
+      chatHistory.push({ role: 'user', content: msg });
+
+      // Append AI loading bubble
+      const aiDiv = document.createElement('div');
+      aiDiv.className = 'copilot-msg ai';
+      aiDiv.innerHTML = `<i>🤖 Analyzing security posture...</i>`;
+      msgsContainer.appendChild(aiDiv);
+      msgsContainer.scrollTop = msgsContainer.scrollHeight;
+
+      const apiKey = localStorage.getItem('groq_api_key') || '';
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg, apiKey, history: chatHistory })
+        });
+        const data = await res.json();
+        const reply = data.reply || 'No response received.';
+
+        chatHistory.push({ role: 'assistant', content: reply });
+
+        let formattedReply = reply
+          .replace(/```([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; overflow-x:auto;"><code>$1</code></pre>')
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+          .replace(/\n/g, '<br>');
+
+        aiDiv.innerHTML = formattedReply;
+      } catch (err) {
+        aiDiv.innerHTML = `❌ Error connecting to AI Copilot: ${err.message}`;
+      }
+      msgsContainer.scrollTop = msgsContainer.scrollHeight;
+    }
+  </script>
+</body>
+
+</html>

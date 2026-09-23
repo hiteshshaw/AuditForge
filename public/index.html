@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuditForge | Automated Security Assessment & Threat Intelligence Platform</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #060911;
+    --bg-surface: #0b1120;
+    --bg-card: rgba(15, 23, 42, 0.75);
+    --bg-card-hover: rgba(30, 41, 59, 0.85);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(56, 189, 248, 0.35);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --cyan-glow: #38bdf8;
+    --blue-accent: #2563eb;
+    --crit: #f43f5e;
+    --high: #f97316;
+    --mod: #eab308;
+    --low: #10b981;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.22) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.6) 0px, transparent 50%),
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
+    background-attachment: fixed;
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* Header & Navigation */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 48px;
+    background: rgba(11, 17, 32, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.4));
+    transition: transform 0.25s ease, filter 0.25s ease;
+  }
+  .brand-logo:hover {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 24px rgba(56, 189, 248, 0.65));
+  }
+  .brand-logo svg, .brand-logo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .brand-text h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right, #fff, #93c5fd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .brand-text p {
+    font-size: 0.72rem;
+    color: var(--cyan-glow);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+  }
+  .btn-dash-nav {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-dash-nav:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(56, 189, 248, 0.5);
+  }
+
+  /* 3-Line Hamburger Menu Button */
+  .hamburger-btn {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 10px;
+    padding: 9px 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    transition: all 0.2s ease;
+  }
+  .hamburger-btn:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--cyan-glow);
+    transform: scale(1.05);
+  }
+  .ham-line {
+    width: 20px;
+    height: 2px;
+    background-color: var(--cyan-glow);
+    border-radius: 2px;
+  }
+
+  /* Hamburger Dropdown */
+  .options-menu-dropdown {
+    position: absolute;
+    top: 54px;
+    right: 0;
+    width: 290px;
+    background: rgba(11, 17, 32, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 200;
+  }
+  .options-menu-dropdown.active { display: flex; }
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--cyan-glow);
+    padding: 4px 8px 8px;
+    font-family: var(--font-mono);
+  }
+  .menu-close-btn { background: none; border: none; color: var(--text-muted); font-size: 1rem; cursor: pointer; }
+  .menu-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+  }
+  .menu-item:hover { background: rgba(56, 189, 248, 0.12); border-left: 3px solid var(--cyan-glow); }
+
+  /* Hero Container */
+  .hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--cyan-glow);
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #ffffff 30%, #93c5fd 70%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 820px;
+    margin: 0 auto 36px;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(56, 189, 248, 0.5);
+  }
+  .btn-secondary {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid var(--border-hover);
+    color: var(--text-main);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-secondary:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--cyan-glow);
+    color: #fff;
+  }
+
+  /* Live Preview Gauge Strip */
+  .preview-card {
+    max-width: 980px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    align-items: center;
+    text-align: left;
+  }
+  .gauge-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(11, 17, 32, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+  }
+  .preview-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .preview-metric-box {
+    background: rgba(11, 17, 32, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .preview-metric-box label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--font-mono);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .preview-metric-box h4 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Features Grid Section */
+  .section-container {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 24px;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .section-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .section-header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  /* 3D Background Canvas & 3D Interactive Controls */
+  #canvas-3d-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.85;
+  }
+
+  .hero-container, .section-container, footer, nav {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* 3D Interactive Mouse Tilt Cards */
+  .tilt-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.15s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .tilt-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.22), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .tilt-card:hover::after {
+    opacity: 1;
+  }
+  .tilt-card:hover {
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.25);
+  }
+  .tilt-3d-layer {
+    transform: translateZ(25px);
+    transform-style: preserve-3d;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+  .feature-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* BYOT Bar Section */
+  .byot-section {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+    border: 1px solid var(--border-hover);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    margin-top: 60px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+  .byot-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .byot-sub {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+  .byot-input-group {
+    display: flex;
+    max-width: 680px;
+    margin: 0 auto;
+    gap: 10px;
+  }
+  .byot-input-group input {
+    flex: 1;
+    background: rgba(6, 9, 17, 0.8);
+    border: 1px solid var(--border-hover);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    outline: none;
+  }
+  .byot-input-group input:focus {
+    border-color: var(--cyan-glow);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  }
+  .byot-input-group button {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .byot-input-group button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 32px 48px;
+    margin-top: 80px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 768px) {
+    .navbar { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero-title { font-size: 2.2rem; }
+    .preview-card { grid-template-columns: 1fr; }
+    .byot-input-group { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 3D Cyber Particle Canvas Background -->
+<canvas id="canvas-3d-bg"></canvas>
+
+<!-- Navigation Bar -->
+<nav class="navbar">
+  <a href="index.html" class="brand">
+    <div class="brand-logo">
+      <img src="logo.svg" alt="AuditForge Logo">
+    </div>
+    <div class="brand-text">
+      <h1>AuditForge</h1>
+      <p>Enterprise Security Suite</p>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#features">Capabilities</a></li>
+    <li><a href="#scopes">7 Scopes</a></li>
+    <li><a href="#byot">BYOT Scanner</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <a href="dashboard.html" class="btn-dash-nav">
+      <span>🚀 Security Dashboard</span>
+    </a>
+
+    <!-- Top Right 3-Line Hamburger Menu -->
+    <button class="hamburger-btn" onclick="toggleOptionsMenu()" title="Menu Options">
+      <div class="ham-line"></div>
+      <div class="ham-line"></div>
+      <div class="ham-line"></div>
+    </button>
+
+    <!-- Options Dropdown Menu -->
+    <div class="options-menu-dropdown" id="options-menu">
+      <div class="menu-header">
+        <span>⚙️ AuditForge Links</span>
+        <button class="menu-close-btn" onclick="toggleOptionsMenu()">✕</button>
+      </div>
+      <div class="menu-divider"></div>
+      <a class="menu-item" href="dashboard.html">
+        <span>🚀</span>
+        <div><b>Launch Security Dashboard</b><br><small>Audit full target application</small></div>
+      </a>
+      <a class="menu-item" href="#byot" onclick="toggleOptionsMenu()">
+        <span>🌐</span>
+        <div><b>Bring Your Own Target</b><br><small>Clone & scan custom GitHub repo</small></div>
+      </a>
+      <div class="menu-divider"></div>
+      <a class="menu-item" href="#scopes" onclick="toggleOptionsMenu()">
+        <span>🛡️</span>
+        <div><b>View 7 Evaluation Scopes</b><br><small>Full Evaluation Breakdown</small></div>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero-container">
+  <div class="hero-badge tilt-card">
+    <span class="tilt-3d-layer">⚡ ENTERPRISE SECURITY SPECIFICATION COMPLIANT</span>
+  </div>
+  <h1 class="hero-title">
+    Automated Security Assessment & Threat Intelligence Platform
+  </h1>
+  <p class="hero-subtitle">
+    Continuous security auditing across all 7 evaluation scopes for government & enterprise Node.js systems. Featuring CVSS v3.1 scoring, safe Proof-of-Concept generation, CERT-In compliance mapping, and dynamic repository scanner.
+  </p>
+
+  <div class="hero-actions">
+    <a href="dashboard.html" class="btn-primary">
+      <span>🚀 Open Security Dashboard</span>
+    </a>
+    <a href="#byot" class="btn-secondary">
+      <span>🌐 Scan Custom GitHub Target</span>
+    </a>
+  </div>
+
+  <!-- Live Security Preview Card with 3D Tilt -->
+  <div class="preview-card tilt-card">
+    <div class="gauge-preview tilt-3d-layer">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+        <circle cx="70" cy="70" r="54" fill="none" stroke="#eab308" stroke-width="10" stroke-dasharray="339.29" stroke-dashoffset="88" stroke-linecap="round" transform="rotate(-90 70 70)"/>
+        <text x="70" y="66" text-anchor="middle" font-size="28" font-weight="800" fill="#fff" font-family="'Plus Jakarta Sans', sans-serif">74</text>
+        <text x="70" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="#94a3b8" font-family="'JetBrains Mono', monospace">GRADE B</text>
+      </svg>
+      <div style="font-size: 0.78rem; color: #eab308; font-weight: 700; margin-top: 8px; font-family: 'JetBrains Mono', monospace;">MODERATE RISK</div>
+    </div>
+
+    <div class="preview-metrics-grid tilt-3d-layer">
+      <div class="preview-metric-box">
+        <label>Active Target</label>
+        <h4 style="font-size: 1rem; color: var(--cyan-glow); font-family: var(--font-mono);">WorldMonitor v1.0.4</h4>
+      </div>
+      <div class="preview-metric-box">
+        <label>Evaluation Scopes</label>
+        <h4>7 / 7 Covered</h4>
+      </div>
+      <div class="preview-metric-box">
+        <label>Vulnerabilities Tracked</label>
+        <h4 style="color: var(--high);">17 Findings</h4>
+      </div>
+      <div class="preview-metric-box">
+        <label>Compliance Status</label>
+        <h4 style="color: #4ade80;">CERT-In Mapped</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<div class="section-container" id="features">
+  <div class="section-header">
+    <h2>Platform Capabilities</h2>
+    <p>Comprehensive security evaluation, automated vulnerability discovery, and enterprise-grade reporting.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer">🛡️</div>
+      <h3>7 Evaluation Scopes</h3>
+      <p>Audits Authentication, Authorization, Input Validation, API Security, Client Controls, Encryption, and Data Privacy.</p>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer">🌐</div>
+      <h3>Bring Your Own Target (BYOT)</h3>
+      <p>Dynamic scanner allows pasting any public GitHub repository URL for automatic depth-1 cloning and scanning.</p>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer">🧪</div>
+      <h3>Safe Proof-of-Concept Engine</h3>
+      <p>Generates non-destructive curl commands and reproducible verification code snippets for instant validation.</p>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer">📜</div>
+      <h3>CERT-In & OWASP Mapping</h3>
+      <p>Every vulnerability is mapped directly to OWASP Top 10 categories and Indian National CERT-In security advisories.</p>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer">📊</div>
+      <h3>Calibrated Posture Score Matrix</h3>
+      <p>Category-capped CVSS v3.1 mathematical scoring algorithm prevents false score zero-outs and accurately reflects risk.</p>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer">🔄</div>
+      <h3>Regression Tracking Timeline</h3>
+      <p>Maintains persistent scan history logs (`scan-history.json`) to track security improvements and delta trends over time.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 7 Security Evaluation Scopes Section -->
+<div class="section-container" id="scopes">
+  <div class="section-header">
+    <h2>7 Security Evaluation Scopes</h2>
+    <p>Comprehensive security auditing framework covering end-to-end vulnerability vectors.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#38bdf8; background:rgba(56,189,248,0.12);">🔑</div>
+      <h3>1. Authentication & Session Management</h3>
+      <p>Audits session persistence, cookie flags (HttpOnly, Secure, SameSite), JWT validation, and brute-force protections.</p>
+      <a href="dashboard.html?scope=Authentication+and+Session+Management" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit Auth Scope ➔</a>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#f97316; background:rgba(249,115,22,0.12);">🚪</div>
+      <h3>2. Authorization & Access Control</h3>
+      <p>Checks Broken Object Level Authorization (BOLA/IDOR), privileged endpoint access, and role-based permissions.</p>
+      <a href="dashboard.html?scope=Authorization+and+Access+Control" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit Access Control ➔</a>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#eab308; background:rgba(234,179,8,0.12);">⚡</div>
+      <h3>3. Input Validation & Data Handling</h3>
+      <p>Detects DOM-based XSS innerHTML sinks, injection flaws, path traversal, and third-party npm package vulnerabilities.</p>
+      <a href="dashboard.html?scope=Input+Validation+and+Data+Handling" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit Input Validation ➔</a>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#0ea5e9; background:rgba(14,165,233,0.12);">🌐</div>
+      <h3>4. API Security</h3>
+      <p>Evaluates API rate-limiting, CORS wildcard exposure, route parameter validation, and REST payload limits.</p>
+      <a href="dashboard.html?scope=API+Security" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit API Security ➔</a>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#a855f7; background:rgba(168,85,247,0.12);">🖥️</div>
+      <h3>5. Client-Side Security Controls</h3>
+      <p>Inspects Content-Security-Policy (CSP), clickjacking headers (X-Frame-Options), and MIME-sniffing protections.</p>
+      <a href="dashboard.html?scope=Client-Side+Security+Controls" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit Client Controls ➔</a>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#10b981; background:rgba(16,185,129,0.12);">🔒</div>
+      <h3>6. Secure Communication Mechanisms</h3>
+      <p>Verifies HTTP Strict Transport Security (HSTS), TLS/SSL cipher suites, and secure protocol redirection.</p>
+      <a href="dashboard.html?scope=Secure+Communication+Mechanisms" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit Secure Comms ➔</a>
+    </div>
+
+    <div class="feature-card tilt-card">
+      <div class="feature-icon tilt-3d-layer" style="color:#ec4899; background:rgba(236,72,153,0.12);">💾</div>
+      <h3>7. Data Storage & Privacy Protections</h3>
+      <p>Audits local/session storage encryption, sensitive PII leakage, and browser state data privacy controls.</p>
+      <a href="dashboard.html?scope=Data+Storage+and+Privacy+Protections" class="btn-secondary" style="font-size:0.8rem; padding:8px 14px; margin-top:auto;">Audit Data Storage ➔</a>
+    </div>
+  </div>
+</div>
+
+<!-- BYOT Section -->
+<div class="section-container" id="byot">
+  <div class="byot-section tilt-card">
+    <div class="byot-title tilt-3d-layer">Bring Your Own Target Repository</div>
+    <div class="byot-sub tilt-3d-layer">Paste any public Node.js GitHub repository URL to launch an immediate automated security scan.</div>
+
+    <div class="byot-input-group tilt-3d-layer">
+      <input type="url" id="home-byot-url" placeholder="https://github.com/org/repository.git" value="https://github.com/koalabeast/WorldMonitor">
+      <button onclick="launchByotScan()">Scan Target Now 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 AuditForge Security Intelligence Platform</p>
+</footer>
+
+<script>
+  // Menu Toggle & BYOT Handler
+  function toggleOptionsMenu() {
+    const menu = document.getElementById('options-menu');
+    if (menu) menu.classList.toggle('active');
+  }
+
+  function launchByotScan() {
+    const input = document.getElementById('home-byot-url').value;
+    if (input) {
+      window.location.href = `dashboard.html?target=${encodeURIComponent(input)}`;
+    }
+  }
+
+  // ----------------------------------------------------
+  // 1. 3D Planet Earth Globe with Continents Canvas Engine
+  // ----------------------------------------------------
+  function init3DCyberGlobe() {
+    const canvas = document.getElementById('canvas-3d-bg');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    let mouseX = 0, mouseY = 0;
+    let targetRotX = 0.25, targetRotY = 0;
+    let rotX = 0.25, rotY = 0;
+    let spaceOffsetX = 0, spaceOffsetY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX - width / 2) / (width / 2);
+      mouseY = (e.clientY - height / 2) / (height / 2);
+      targetRotY = mouseX * 0.6;
+      targetRotX = 0.25 - mouseY * 0.4;
+    });
+
+    // Generate Deep Space Stars with Multi-Layer Parallax
+    const spaceStarCount = 260;
+    const spaceStars = [];
+    for (let i = 0; i < spaceStarCount; i++) {
+      spaceStars.push({
+        x: Math.random() * 2600,
+        y: Math.random() * 1800,
+        z: Math.random() * 1200 + 100,
+        size: Math.random() * 1.6 + 0.6,
+        twinkleSpeed: Math.random() * 1.6 + 0.8,
+        twinkleOffset: Math.random() * Math.PI * 2,
+        colorType: Math.random()
+      });
+    }
+
+    // Dynamic Cosmic Shooting Stars
+    const shootingStars = [];
+    function spawnShootingStar() {
+      if (shootingStars.length < 2 && Math.random() < 0.012) {
+        shootingStars.push({
+          x: Math.random() * width * 1.3 - width * 0.15,
+          y: Math.random() * height * 0.45,
+          length: Math.random() * 70 + 45,
+          speed: Math.random() * 7 + 5,
+          angle: (Math.PI / 4) + (Math.random() - 0.5) * 0.35,
+          opacity: 0.9,
+          decay: Math.random() * 0.018 + 0.012
+        });
+      }
+    }
+
+    const R = Math.min(width, height) * (width > 768 ? 0.38 : 0.45);
+    const fov = 620;
+
+    // 1. Generate Realistic 3D Earth Continents Landmass Particles
+    const landParticles = [];
+    const degToRad = Math.PI / 180;
+
+    const continentRegions = [
+      // North America
+      { minLat: 15 * degToRad, maxLat: 72 * degToRad, minLon: -168 * degToRad, maxLon: -52 * degToRad, density: 180 },
+      // South America
+      { minLat: -55 * degToRad, maxLat: 12 * degToRad, minLon: -82 * degToRad, maxLon: -34 * degToRad, density: 140 },
+      // Europe
+      { minLat: 36 * degToRad, maxLat: 71 * degToRad, minLon: -10 * degToRad, maxLon: 45 * degToRad, density: 150 },
+      // Africa
+      { minLat: -35 * degToRad, maxLat: 37 * degToRad, minLon: -17 * degToRad, maxLon: 51 * degToRad, density: 180 },
+      // Asia & India
+      { minLat: 8 * degToRad, maxLat: 75 * degToRad, minLon: 42 * degToRad, maxLon: 145 * degToRad, density: 260 },
+      // Australia / Oceania
+      { minLat: -44 * degToRad, maxLat: -10 * degToRad, minLon: 112 * degToRad, maxLon: 178 * degToRad, density: 110 },
+      // Greenland
+      { minLat: 60 * degToRad, maxLat: 83 * degToRad, minLon: -73 * degToRad, maxLon: -12 * degToRad, density: 60 }
+    ];
+
+    continentRegions.forEach(reg => {
+      for (let k = 0; k < reg.density; k++) {
+        const lat = reg.minLat + Math.random() * (reg.maxLat - reg.minLat);
+        const lon = reg.minLon + Math.random() * (reg.maxLon - reg.minLon);
+        landParticles.push({
+          x: R * Math.cos(lat) * Math.cos(lon),
+          y: R * Math.sin(lat),
+          z: R * Math.cos(lat) * Math.sin(lon)
+        });
+      }
+    });
+
+    // 2. Latitude & Longitude Grid Lines
+    const gridNodes = [];
+    const latCount = 9;
+    for (let i = 1; i < latCount; i++) {
+      const lat = -Math.PI / 2 + (Math.PI * i) / latCount;
+      const rLat = R * Math.cos(lat);
+      const yLat = R * Math.sin(lat);
+      const segs = 36;
+      for (let j = 0; j < segs; j++) {
+        const lon = (Math.PI * 2 * j) / segs;
+        gridNodes.push({
+          x: rLat * Math.cos(lon),
+          y: yLat,
+          z: rLat * Math.sin(lon)
+        });
+      }
+    }
+
+    // 3. Key Global Security Hubs (Cities & Threat Centers)
+    const cyberHubs = [
+      { lat: 40 * degToRad, lon: -74 * degToRad, name: 'NYC Security Center' },
+      { lat: 51.5 * degToRad, lon: -0.1 * degToRad, name: 'London Audit Hub' },
+      { lat: 28.6 * degToRad, lon: 77.2 * degToRad, name: 'India HQ (IN-DELHI)' },
+      { lat: 35.6 * degToRad, lon: 139.6 * degToRad, name: 'Tokyo Cyber Gate' },
+      { lat: -33.8 * degToRad, lon: 151.2 * degToRad, name: 'Sydney Node' },
+      { lat: -23.5 * degToRad, lon: -46.6 * degToRad, name: 'Sao Paulo Station' },
+      { lat: 30.0 * degToRad, lon: 31.2 * degToRad, name: 'Cairo Relay' }
+    ];
+
+    cyberHubs.forEach(hub => {
+      hub.x = R * Math.cos(hub.lat) * Math.cos(hub.lon);
+      hub.y = R * Math.sin(hub.lat);
+      hub.z = R * Math.cos(hub.lat) * Math.sin(hub.lon);
+    });
+
+    let animTime = 0;
+
+    function render3D() {
+      ctx.clearRect(0, 0, width, height);
+      animTime += 0.004;
+
+      // Smooth camera & space parallax easing
+      spaceOffsetX += (mouseX * 80 - spaceOffsetX) * 0.045;
+      spaceOffsetY += (mouseY * 60 - spaceOffsetY) * 0.045;
+
+      // 1. Render Deep Space Stars with Multi-Layer Parallax
+      for (let i = 0; i < spaceStarCount; i++) {
+        const star = spaceStars[i];
+        const depthFactor = (1300 - star.z) / 1300; // 0.1 to 0.95
+        
+        // Wrap coordinates so space stars seamlessly drift & follow cursor without cutoffs
+        const sx = ((star.x + spaceOffsetX * depthFactor * 1.8) % width + width) % width;
+        const sy = ((star.y + spaceOffsetY * depthFactor * 1.8) % height + height) % height;
+
+        const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(animTime * star.twinkleSpeed * 3 + star.twinkleOffset));
+        const alpha = Math.min(0.9, Math.max(0.12, (1 - star.z / 1400) * twinkle));
+
+        let color = `rgba(255, 255, 255, ${alpha})`;
+        if (star.colorType > 0.8) color = `rgba(56, 189, 248, ${alpha})`;
+        else if (star.colorType > 0.65) color = `rgba(168, 85, 247, ${alpha})`;
+        else if (star.colorType > 0.5) color = `rgba(125, 211, 252, ${alpha})`;
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(sx, sy, star.size * (0.8 + 0.3 * twinkle), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 2. Render Cosmic Shooting Stars
+      spawnShootingStar();
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += Math.cos(s.angle) * s.speed;
+        s.y += Math.sin(s.angle) * s.speed;
+        s.opacity -= s.decay;
+
+        if (s.opacity <= 0 || s.x > width + 100 || s.y > height + 100) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+
+        const tailX = s.x - Math.cos(s.angle) * s.length;
+        const tailY = s.y - Math.sin(s.angle) * s.length;
+
+        const grad = ctx.createLinearGradient(tailX, tailY, s.x, s.y);
+        grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+        grad.addColorStop(1, `rgba(224, 242, 254, ${s.opacity})`);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(s.x, s.y);
+        ctx.stroke();
+      }
+
+      rotX += (targetRotX - rotX) * 0.04;
+      rotY += (targetRotY - rotY + 0.0025) * 0.04;
+
+      const autoLon = animTime * 0.7;
+      const currentRotY = rotY + autoLon;
+
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const cosY = Math.cos(currentRotY), sinY = Math.sin(currentRotY);
+
+      // Globe center also floats gracefully in space with cursor parallax
+      const centerX = width / 2 + spaceOffsetX * 0.22;
+      const centerY = height / 2 + spaceOffsetY * 0.22;
+
+      function project(p) {
+        let x1 = p.x * cosY - p.z * sinY;
+        let z1 = p.z * cosY + p.x * sinY;
+        let y2 = p.y * cosX - z1 * sinX;
+        let z2 = z1 * cosX + p.y * sinX;
+
+        const scale = fov / (fov + z2 + 550);
+        return {
+          x: x1 * scale + centerX,
+          y: y2 * scale + centerY,
+          z: z2,
+          scale,
+          alpha: Math.max(0.08, (z2 + R) / (2 * R))
+        };
+      }
+
+ 
+      // 4. Render Latitude/Longitude Wireframe Grid (Subtle)
+      for (let i = 0; i < gridNodes.length; i++) {
+        const proj = project(gridNodes[i]);
+        if (proj.z > 0) {
+          ctx.fillStyle = `rgba(14, 116, 144, ${0.25 * proj.alpha})`;
+          ctx.fillRect(proj.x - 1, proj.y - 1, 1.8 * proj.scale, 1.8 * proj.scale);
+        }
+      }
+
+      // 5. Render Continent Landmass Particles & Continent Mesh Lines
+      const projLand = landParticles.map(p => project(p));
+
+      // Continent Web Mesh Lines
+      ctx.lineWidth = 0.8;
+      for (let i = 0; i < projLand.length; i += 2) {
+        const p1 = projLand[i];
+        if (p1.z <= -R * 0.1) continue;
+        for (let j = i + 1; j < projLand.length; j += 2) {
+          const p2 = projLand[j];
+          if (p2.z <= -R * 0.1) continue;
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 38) {
+            const alpha = (1 - dist / 38) * 0.4 * p1.alpha;
+            ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Continent Land Particles
+      for (let i = 0; i < projLand.length; i++) {
+        const p = projLand[i];
+        if (p.z > -R * 0.15) {
+          ctx.fillStyle = p.z > 0 ? '#38bdf8' : 'rgba(14, 165, 233, 0.6)';
+          const r = Math.max(1.2, 2.4 * p.scale);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 6. Render Security Telemetry Signal Arcs between Global Hubs
+      const projHubs = cyberHubs.map(h => ({ ...project(h), name: h.name }));
+      ctx.lineWidth = 1.4;
+      for (let i = 0; i < projHubs.length; i++) {
+        const p1 = projHubs[i];
+        const p2 = projHubs[(i + 1) % projHubs.length];
+        if (p1.z > -R * 0.3 && p2.z > -R * 0.3) {
+          const midX = (p1.x + p2.x) / 2 - (p1.y - p2.y) * 0.3;
+          const midY = (p1.y + p2.y) / 2 + (p1.x - p2.x) * 0.3;
+          
+          ctx.strokeStyle = `rgba(16, 185, 129, ${0.45 * Math.min(p1.alpha, p2.alpha)})`;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
+          ctx.stroke();
+
+          // Signal Pulse Packet
+          const pulseT = (animTime * 2.0 + i * 0.35) % 1;
+          const px = (1 - pulseT) * (1 - pulseT) * p1.x + 2 * (1 - pulseT) * pulseT * midX + pulseT * pulseT * p2.x;
+          const py = (1 - pulseT) * (1 - pulseT) * p1.y + 2 * (1 - pulseT) * pulseT * midY + pulseT * pulseT * p2.y;
+          
+          ctx.fillStyle = '#10b981';
+          ctx.shadowColor = '#10b981';
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      // 7. Render Cyber Hubs & Radar Ping Rings
+      projHubs.forEach(p => {
+        if (p.z > -R * 0.3) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 14;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 5 * p.scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.7)';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, (9 + Math.sin(animTime * 6 + p.x) * 4) * p.scale, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      });
+
+
+
+      requestAnimationFrame(render3D);
+    }
+
+    render3D();
+  }
+
+  init3DCyberGlobe();
+
+  // ----------------------------------------------------
+  // 2. Interactive 3D Parallax Mouse Tilt Handler on Cards
+  // ----------------------------------------------------
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -12;
+      const rotateY = ((x - centerX) / centerX) * 12;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    });
+  });
+</script>
+
+<!-- Floating AI Copilot Widget -->
+<style>
+  .copilot-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #fff;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    transition: all 0.25s ease;
+  }
+  .copilot-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 40px rgba(56, 189, 248, 0.6);
+  }
+  .copilot-window {
+    position: fixed;
+    bottom: 84px;
+    right: 24px;
+    width: 390px;
+    height: 560px;
+    background: rgba(11, 17, 32, 0.96);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+    display: none;
+    flex-direction: column;
+    z-index: 1001;
+    overflow: hidden;
+    animation: copilotSlide 0.25s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+  }
+  .copilot-window.active { display: flex; }
+  @keyframes copilotSlide {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .copilot-header {
+    padding: 14px 18px;
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .copilot-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .copilot-badge {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--cyan-glow);
+    font-size: 0.68rem;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+  }
+  .copilot-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .copilot-icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .copilot-icon-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+
+  .copilot-key-panel {
+    display: none;
+    padding: 12px 16px;
+    background: rgba(30, 41, 59, 0.9);
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.8rem;
+  }
+  .copilot-key-panel.active { display: block; }
+  .copilot-key-input {
+    width: 100%;
+    background: rgba(6, 9, 17, 0.8);
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    margin: 6px 0 8px;
+    outline: none;
+  }
+
+  .copilot-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.84rem;
+  }
+  .copilot-msg {
+    max-width: 86%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  .copilot-msg.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #fff;
+    border-bottom-right-radius: 3px;
+  }
+  .copilot-msg.ai {
+    align-self: flex-start;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-main);
+    border-bottom-left-radius: 3px;
+  }
+  .copilot-msg code {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--cyan-glow);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .copilot-chips {
+    padding: 8px 16px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    background: rgba(6, 9, 17, 0.5);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .copilot-chip {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: var(--cyan-glow);
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .copilot-chip:hover {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: var(--cyan-glow);
+  }
+
+  .copilot-input-area {
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.9);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    gap: 8px;
+  }
+  .copilot-input-area input {
+    flex: 1;
+    background: rgba(6, 9, 17, 0.8);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+  }
+  .copilot-input-area input:focus { border-color: var(--cyan-glow); }
+  .copilot-send-btn {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    border: none;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+</style>
+
+<button class="copilot-btn" onclick="toggleCopilotModal()">
+  <span>🤖 AI Copilot</span>
+  <span style="width:8px; height:8px; background:#4ade80; border-radius:50%; box-shadow:0 0 8px #4ade80;"></span>
+</button>
+
+<div class="copilot-window" id="copilot-window">
+  <div class="copilot-header">
+    <div class="copilot-title">
+      <span>🤖 AuditForge Copilot</span>
+      <span class="copilot-badge">Groq llama-3.3-70b</span>
+    </div>
+    <div class="copilot-header-actions">
+      <button class="copilot-icon-btn" onclick="toggleKeyPanel()" title="Groq API Key Settings">⚙️</button>
+      <button class="copilot-icon-btn" onclick="toggleCopilotModal()">✕</button>
+    </div>
+  </div>
+
+  <div class="copilot-key-panel" id="copilot-key-panel">
+    <div style="font-weight:700; color:var(--cyan-glow); margin-bottom:4px;">Groq API Key Configuration</div>
+    <div style="color:var(--text-muted); font-size:0.75rem;">Enter your Groq key (<code>gsk_...</code>) for live AI threat analysis.</div>
+    <input type="password" id="groq-key-input" class="copilot-key-input" placeholder="gsk_..." onchange="saveGroqKey(this.value)">
+    <div style="font-size:0.7rem; color:#4ade80;" id="key-saved-msg"></div>
+  </div>
+
+  <div class="copilot-messages" id="copilot-messages">
+    <div class="copilot-msg ai">
+      <b>👋 Welcome to AuditForge AI Copilot!</b><br>
+      I am trained on all <b>7 Security Scopes</b>, <b>CERT-In Guidelines</b>, <b>OWASP Top 10</b>, and your active audit findings.<br><br>
+      How can I assist your security audit today?
+    </div>
+  </div>
+
+  <div class="copilot-chips">
+    <button class="copilot-chip" onclick="sendChip('How to fix DOM XSS in dom-utils.ts?')">Fix DOM XSS</button>
+    <button class="copilot-chip" onclick="sendChip('Explain the 17 High Severity findings')">17 High Findings</button>
+    <button class="copilot-chip" onclick="sendChip('How to fix missing Content-Security-Policy?')">Fix CSP Headers</button>
+    <button class="copilot-chip" onclick="sendChip('Explain CERT-In compliance mapping')">CERT-In Rules</button>
+  </div>
+
+  <div class="copilot-input-area">
+    <input type="text" id="copilot-input" placeholder="Ask AI Security Copilot..." onkeydown="if(event.key==='Enter') sendCopilotMsg()">
+    <button class="copilot-send-btn" onclick="sendCopilotMsg()">🚀</button>
+  </div>
+</div>
+
+<script>
+  let chatHistory = [];
+
+  function toggleCopilotModal() {
+    const win = document.getElementById('copilot-window');
+    win.classList.toggle('active');
+    const savedKey = localStorage.getItem('groq_api_key');
+    if (savedKey) {
+      document.getElementById('groq-key-input').value = savedKey;
+    }
+  }
+
+  function toggleKeyPanel() {
+    const panel = document.getElementById('copilot-key-panel');
+    panel.classList.toggle('active');
+  }
+
+  function saveGroqKey(val) {
+    if (val) {
+      localStorage.setItem('groq_api_key', val.trim());
+      document.getElementById('key-saved-msg').innerText = '✓ Groq API Key saved!';
+    }
+  }
+
+  function sendChip(txt) {
+    document.getElementById('copilot-input').value = txt;
+    sendCopilotMsg();
+  }
+
+  async function sendCopilotMsg() {
+    const input = document.getElementById('copilot-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const msgsContainer = document.getElementById('copilot-messages');
+    
+    // Append user message
+    const userDiv = document.createElement('div');
+    userDiv.className = 'copilot-msg user';
+    userDiv.innerText = msg;
+    msgsContainer.appendChild(userDiv);
+
+    input.value = '';
+    msgsContainer.scrollTop = msgsContainer.scrollHeight;
+
+    chatHistory.push({ role: 'user', content: msg });
+
+    // Append AI loading bubble
+    const aiDiv = document.createElement('div');
+    aiDiv.className = 'copilot-msg ai';
+    aiDiv.innerHTML = `<i>🤖 Analyzing security posture...</i>`;
+    msgsContainer.appendChild(aiDiv);
+    msgsContainer.scrollTop = msgsContainer.scrollHeight;
+
+    const apiKey = localStorage.getItem('groq_api_key') || '';
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, apiKey, history: chatHistory })
+      });
+      const data = await res.json();
+      const reply = data.reply || 'No response received.';
+
+      chatHistory.push({ role: 'assistant', content: reply });
+      
+      let formattedReply = reply
+        .replace(/```([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; overflow-x:auto;"><code>$1</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+        .replace(/\n/g, '<br>');
+
+      aiDiv.innerHTML = formattedReply;
+    } catch (err) {
+      aiDiv.innerHTML = `❌ Error connecting to AI Copilot: ${err.message}`;
+    }
+    msgsContainer.scrollTop = msgsContainer.scrollHeight;
+  }
+</script>
+</body>
+</html>
